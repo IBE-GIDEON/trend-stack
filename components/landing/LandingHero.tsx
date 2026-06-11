@@ -169,7 +169,7 @@ export function LandingHero() {
           {/* Top Badge logo */}
           <motion.div
             variants={itemVariants}
-            className="flex items-center space-x-2.5 bg-zinc-50 px-4 py-1.5 rounded-full mb-8"
+            className="flex items-center space-x-2.5 mb-8"
           >
             <TrendStackLogo size={24} />
             <span className="font-sans font-extrabold text-[13px] text-black tracking-tight flex items-center">
