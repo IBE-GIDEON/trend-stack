@@ -1,0 +1,261 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Theme tokens — the neutral spine lives in CSS variables so one class on
+   <html> inverts the whole surface. Dark is the default and the showcase.
+   ─────────────────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: dark;
+  --c-ink: 15 15 15;        /* Page Canvas: dark charcoal #0F0F0F */
+  --c-void: 15 15 15;       /* Content sections/margins */
+  --c-charcoal: 20 20 20;   /* Cards/sidebar background: #141414 */
+  --c-graphite: 28 28 28;   /* Raised surfaces */
+  --c-steel: 38 38 38;      /* Hover surface */
+  --c-fog: 45 45 45;        /* Hairlines / borders */
+  --c-line: 63 63 63;       /* Dividers */
+  --c-ash: 120 120 120;     /* Faint text */
+  --c-muted: 160 158 151;   /* Secondary text */
+  --c-mist: 210 208 200;    /* Tertiary headings */
+  --c-soft: 247 244 235;    /* Primary text: Cream white #F7F4EB */
+
+  /* Dark mode accent: Cream white */
+  --c-accent: 247 244 235;
+  --c-accent-bright: 255 255 255;
+  --c-accent-deep: 230 227 220;
+  --c-accent-ink: 20 20 20;
+}
+
+.light {
+  color-scheme: light;
+  --c-ink: 250 246 238;     /* Page Canvas: Cream White #FAF6EE */
+  --c-void: 250 246 238;    /* Content margins */
+  --c-charcoal: 243 237 224; /* Cards/sidebar background: #F3EDE0 */
+  --c-graphite: 236 230 217; /* Raised surfaces */
+  --c-steel: 228 221 207;   /* Hover surface */
+  --c-fog: 220 212 195;     /* Hairlines / borders */
+  --c-line: 200 191 172;     /* Dividers */
+  --c-ash: 140 137 130;     /* Faint text */
+  --c-muted: 95 93 88;      /* Secondary text: #5F5E5A */
+  --c-mist: 55 53 47;       /* Tertiary headings: #37352F */
+  --c-soft: 28 28 26;       /* Primary text: Soft Black #1C1C1A */
+
+  /* Light mode accent: Solid Black */
+  --c-accent: 0 0 0;
+  --c-accent-bright: 28 28 26;
+  --c-accent-deep: 0 0 0;
+  --c-accent-ink: 250 246 238;
+}
+
+.surface-dark {
+  --c-ink: 15 15 15;
+  --c-void: 15 15 15;
+  --c-charcoal: 20 20 20;
+  --c-graphite: 28 28 28;
+  --c-steel: 38 38 38;
+  --c-fog: 45 45 45;
+  --c-line: 63 63 63;
+  --c-ash: 120 120 120;
+  --c-muted: 160 158 151;
+  --c-mist: 210 208 200;
+  --c-soft: 247 244 235;
+
+  --c-accent: 247 244 235;
+  --c-accent-bright: 255 255 255;
+  --c-accent-deep: 230 227 220;
+  --c-accent-ink: 20 20 20;
+}
+
+@layer base {
+  * {
+    border-color: theme("colors.fog");
+  }
+  html {
+    scroll-behavior: smooth;
+    /* offset anchor jumps for the sticky top bar + nav */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-ink text-soft antialiased;
+    font-feature-settings: "ss01", "cv01", "cv03";
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: rgb(46 124 255 / 0.3);
+    color: #fff;
+  }
+  /* refined dark scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--c-void));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--c-line));
+    border: 2px solid rgb(var(--c-void));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--c-ash));
+  }
+}
+
+@layer utilities {
+  /* fine technical grid (white lines — only used on dark surfaces) */
+  .bg-tech-grid {
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.025) 1px, transparent 1px);
+    background-size: 46px 46px;
+  }
+  /* subtle film grain */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* ── Decorative motion ───────────────────────────────────────────────────── */
+@keyframes fog-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate3d(5%, -4%, 0) scale(1.12);
+    opacity: 1;
+  }
+}
+.hero-fog {
+  animation: fog-drift 20s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.hero-fog--delayed {
+  animation-duration: 26s;
+  animation-delay: -8s;
+}
+
+@keyframes aurora-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    scale: 1;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.14;
+  }
+}
+.aurora {
+  animation: aurora-pulse 22s ease-in-out infinite;
+  will-change: opacity, scale;
+}
+.aurora--slow {
+  animation-duration: 32s;
+}
+
+/* Honour reduced-motion: kill every decorative loop. Scroll-linked reveals are
+   handled per-component via Framer Motion's useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .hero-fog,
+  .aurora,
+  .animate-ticker,
+  .animate-pulse-dot,
+  .animate-fade-up {
+    animation: none !important;
+  }
+}
+
+/* ── Notion Block Styles ─────────────────────────────────────────────────── */
+
+.notion-callout {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid rgb(var(--c-fog));
+  background-color: rgb(var(--c-charcoal));
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.notion-quote {
+  border-left: 3px solid rgb(var(--c-line));
+  padding-left: 14px;
+  margin: 12px 0;
+  font-style: normal;
+  color: rgb(var(--c-muted));
+}
+
+.notion-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 3px;
+  line-height: 120%;
+  text-transform: capitalize;
+}
+
+/* Notion Tag Palettes (Light & Dark matching Cream White & Black Theme) */
+.notion-tag-ai, .notion-tag-opinion { background-color: rgba(144, 96, 252, 0.12); color: #6e3ad2; }
+.notion-tag-startups, .notion-tag-science { background-color: rgba(0, 135, 107, 0.1); color: #026651; }
+.notion-tag-big-tech, .notion-tag-cloud { background-color: rgba(9, 109, 217, 0.1); color: #096dd9; }
+.notion-tag-markets, .notion-tag-finance { background-color: rgba(223, 171, 0, 0.12); color: #876500; }
+.notion-tag-cybersecurity { background-color: rgba(235, 87, 87, 0.1); color: #c52d2d; }
+.notion-tag-programming, .notion-tag-products { background-color: rgba(217, 115, 13, 0.1); color: #a65202; }
+.notion-tag-data, .notion-tag-open-source { background-color: rgba(118, 120, 125, 0.1); color: #4f5156; }
+
+/* Dark mode overrides for Notion tags */
+.light-tag { /* Defaults if no specific theme */ }
+html:not(.light) .notion-tag-ai, html:not(.light) .notion-tag-opinion { background-color: rgba(154, 109, 254, 0.22); color: #c09fff; }
+html:not(.light) .notion-tag-startups, html:not(.light) .notion-tag-science { background-color: rgba(36, 179, 149, 0.2); color: #5eead4; }
+html:not(.light) .notion-tag-big-tech, html:not(.light) .notion-tag-cloud { background-color: rgba(56, 156, 255, 0.2); color: #8ec5fc; }
+html:not(.light) .notion-tag-markets, html:not(.light) .notion-tag-finance { background-color: rgba(255, 213, 90, 0.2); color: #ffe480; }
+html:not(.light) .notion-tag-cybersecurity { background-color: rgba(255, 120, 120, 0.2); color: #ff9e9e; }
+html:not(.light) .notion-tag-programming, html:not(.light) .notion-tag-products { background-color: rgba(255, 163, 64, 0.2); color: #ffcc99; }
+html:not(.light) .notion-tag-data, html:not(.light) .notion-tag-open-source { background-color: rgba(180, 180, 180, 0.2); color: #d5d5d5; }
+
+/* Notion Dense Grid & Tables */
+.notion-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+
+.notion-table th {
+  font-weight: 500;
+  color: rgb(var(--c-muted));
+  border-bottom: 1px solid rgb(var(--c-fog));
+  padding: 8px 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.notion-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgb(var(--c-fog));
+  color: rgb(var(--c-soft));
+  white-space: nowrap;
+}
+
+.notion-table tr:hover td {
+  background-color: rgb(var(--c-steel));
+}
+
