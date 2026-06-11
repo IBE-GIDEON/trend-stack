@@ -140,8 +140,8 @@ export function InteractiveDots() {
       
       let radius = Math.min(w, h) * 0.26;
       if (isMobile) {
-        if (radius < 85) radius = 85;
-        if (radius > 120) radius = 120;
+        if (radius < 110) radius = 110;
+        if (radius > 140) radius = 140;
       } else {
         if (radius < 150) radius = 150;
         if (radius > 280) radius = 280;
@@ -150,10 +150,10 @@ export function InteractiveDots() {
       return {
         isMobile,
         sphereRadius: radius,
-        logoSize: isMobile ? 22 : 38,
-        connectionMaxDist: isMobile ? 45 : 65,
-        magneticRadius: isMobile ? 70 : 140,
-        hoverTriggerDist: isMobile ? 45 : 80
+        logoSize: isMobile ? 26 : 38,
+        connectionMaxDist: isMobile ? 50 : 65,
+        magneticRadius: isMobile ? 90 : 140,
+        hoverTriggerDist: isMobile ? 50 : 80
       };
     };
 
