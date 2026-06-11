@@ -195,6 +195,11 @@ export function LandingHeader() {
   useEffect(() => {
     if (!mobileOpen) return;
     const handler = (e: MouseEvent) => {
+      // If clicking the toggle button or inside it, ignore the outside click handler
+      const toggleBtn = document.getElementById("mobile-menu-toggle");
+      if (toggleBtn && (toggleBtn === e.target || toggleBtn.contains(e.target as Node))) {
+        return;
+      }
       if (drawerRef.current && !drawerRef.current.contains(e.target as Node)) {
         setMobileOpen(false);
       }
