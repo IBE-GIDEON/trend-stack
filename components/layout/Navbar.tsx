@@ -35,6 +35,7 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [starred, setStarred] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // mobile menu for Beats & Resources
   const { activeItem, setActiveItem, sidebarOpen, setSidebarOpen } = useNotion();
 
   // ⌘K / Ctrl+K opens search
@@ -97,7 +98,31 @@ export function Navbar() {
           >
             {copied ? "Link Copied!" : "Share"}
           </button>
-
+          {/* Mobile Beats & Resources Menu */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="sm:hidden flex h-7 w-7 items-center justify-center rounded-sm hover:bg-steel text-muted hover:text-soft"
+            aria-label="Menu"
+          >
+            <span className="text-base font-bold">☰</span>
+          </button>
+          {/* Menu dropdown */}
+          {menuOpen && (
+            <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onClick={() => setMenuOpen(false)}
+              style={{ inset: 0 }}
+            >
+              <div className="absolute top-12 right-4 w-48 bg-charcoal rounded-md shadow-lg border border-fog/30" onClick={e => e.stopPropagation()}>
+                <ul className="flex flex-col p-2 space-y-1">
+                  <li>
+                    <a href="/beats" className="block px-3 py-2 rounded hover:bg-steel text-muted hover:text-soft" onClick={() => setMenuOpen(false)}>Beats Blog</a>
+                  </li>
+                  <li>
+                    <a href="/resources" className="block px-3 py-2 rounded hover:bg-steel text-muted hover:text-soft" onClick={() => setMenuOpen(false)}>Resources</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
           {/* Star Page Button */}
           <button
             onClick={() => setStarred((v) => !v)}

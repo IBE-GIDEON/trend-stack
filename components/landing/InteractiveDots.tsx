@@ -37,63 +37,8 @@ interface LogoParticle {
   opacity: number;
 }
 
-function getLogoSvg(name: string, isLight: boolean): string {
-  const color = isLight ? "rgba(15, 15, 15, 0.85)" : "rgba(247, 244, 235, 0.85)";
-  const accent = isLight ? "#2563eb" : "#60a5fa"; // Tech-blue brand accent
 
-  switch (name) {
-    case "OpenAI":
-      // High-accuracy OpenAI spiral flower vector
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M19.61 11.2a4.4 4.4 0 0 0-2.31-3.64l-1.07-.62a4.4 4.4 0 0 0-5.88 1.57l-.31.53-2.94-1.7a4.4 4.4 0 0 0-6.17.65 4.4 4.4 0 0 0 .65 6.17l1.07.62a4.4 4.4 0 0 0 1.57.4l-.27 3.12a4.4 4.4 0 0 0 3.79 4.75h.36a4.4 4.4 0 0 0 4.39-3.72l.27-3.12 2.94 1.7a4.4 4.4 0 0 0 6.17-.65 4.4 4.4 0 0 0-.65-6.17zm-8.8-6.11a2.4 2.4 0 0 1 3.2-.86l1.07.62a2.4 2.4 0 0 1 .86 3.2l-3.23 5.6-1.7-1a2.4 2.4 0 0 1-.2-3.08zm-6.2 5.09a2.4 2.4 0 0 1 .86-3.2l1.07-.62a2.4 2.4 0 0 1 3.2.86l1.7 1-5.6 3.23a2.4 2.4 0 0 1-1.23-1.27zm2.46 6.84a2.4 2.4 0 0 1-1.32-3.06l1.07-.62a2.4 2.4 0 0 1 3.06 1.32l.31 3.55a2.4 2.4 0 0 1-3.12-1.19zm8.8 6.11a2.4 2.4 0 0 1-3.2.86l-1.07-.62a2.4 2.4 0 0 1-.86-3.2l3.23-5.6 1.7 1a2.4 2.4 0 0 1 .2 3.08zm6.2-5.09a2.4 2.4 0 0 1-.86 3.2l-1.07.62a2.4 2.4 0 0 1-3.2-.86l-1.7-1 5.6-3.23c.43.34.8.77 1.03 1.27zm-2.46-6.84a2.4 2.4 0 0 1 1.32 3.06l-1.07.62a2.4 2.4 0 0 1-3.06-1.32l-.31-3.55a2.4 2.4 0 0 1 3.12 1.19z" fill="${color}" /></svg>`;
-    case "Gemini":
-      // Google Gemini dual sparkle vector (blue large sparkle + pink secondary sparkle)
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M11.5 2c0 4.97-4.03 9-9 9 4.97 0 9 4.03 9 9 0-4.97 4.03-9 9-9-4.97 0-9-4.03-9-9z" fill="${accent}"/><path d="M19 8c0 1.66-1.34 3-3 3 1.66 0 3 1.34 3 3 0-1.66 1.34-3 3-3-1.66 0-3-1.34-3-3z" fill="#f43f5e"/></svg>`;
-    case "Anthropic":
-      // Organic hand-drawn monogram "A" of Anthropic
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M18.1 19.1c-.8-2-3.1-8-5.3-13.6-.3-.7-.9-1.2-1.7-1.2h-.2c-.8 0-1.4.5-1.7 1.2L3.9 19.1c-.2.6 0 1.2.4 1.5.3.2.7.3 1 .3.5 0 1-.3 1.2-.8l1.4-3.6h8.2l1.4 3.6c.2.5.7.8 1.2.8.3 0 .7-.1 1-.3.4-.3.6-.9.4-1.5zM9.1 14.5l2.9-7.4 2.9 7.4H9.1z" fill="${color}" /></svg>`;
-    case "Meta":
-      // Meta infinity loop
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M16.45 6a4.43 4.43 0 0 0-3.32 1.5 4.43 4.43 0 0 0-3.32-1.5C7.26 6 5 8.26 5 11s2.26 5 4.81 5a4.43 4.43 0 0 0 3.32-1.5 4.43 4.43 0 0 0 3.32 1.5c2.55 0 4.81-2.26 4.81-5s-2.26-5-4.81-5zm-6.64 8C8.25 14 7 12.75 7 11s1.25-3 2.81-3c1.37 0 2.45.98 2.81 2.2a4 4 0 0 0-.25 1.59 4 4 0 0 0 .25 1.59C12.26 13.02 11.18 14 9.81 14zm6.64 0c-1.37 0-2.45-.98-2.81-2.2a4 4 0 0 0 .25-1.59 4 4 0 0 0-.25-1.59c.36-1.22 1.44-2.2 2.81-2.2C18.25 8 19.5 9.25 19.5 11s-1.25 3-2.81 3z" fill="${color}" /></svg>`;
-    case "Mistral":
-      // Double nested geometric wind chevrons of Mistral AI
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M4 5.5l8 4.8 8-4.8v3.2l-8 4.8-8-4.8V5.5zm0 5l8 4.8 8-4.8v3.2l-8 4.8-8-4.8v-3.2z" fill="#f97316"/></svg>`;
-    case "Microsoft":
-      // Microsoft four-colored squares
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect x="3" y="3" width="8" height="8" fill="#f25022" /><rect x="13" y="3" width="8" height="8" fill="#7fba00" /><rect x="3" y="13" width="8" height="8" fill="#00a4ef" /><rect x="13" y="13" width="8" height="8" fill="#ffb900" /></svg>`;
-    case "xAI":
-      // mathematical italic x with serif horizontal slash representing xAI
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M6 18.5l3.5-5.5L6 7.5h2.8l2.1 3.5 2.1-3.5h2.8l-3.5 5.5 3.5 5.5h-2.8L11 15l-2.1 3.5H6z M14.5 13.5h5.5v1.5h-5.5v-1.5z" fill="${color}" /></svg>`;
-    case "Cohere":
-      // Cohere cellular concentric organic shapes
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 17c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm-3-7c0-1.66 1.34-3 3-3s3 1.34 3 3-1.34 3-3 3-3-1.34-3-3z" fill="${accent}" fill-rule="evenodd" /></svg>`;
-    case "Google":
-      // Clean, four-colored Google "G" logo
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/></svg>`;
-    case "Apple":
-      // Apple icon silhouette matching theme color
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.21.67-2.93 1.49-.62.69-1.16 1.84-1.01 2.96 1.12.09 2.27-.57 2.95-1.39z" fill="${color}"/></svg>`;
-    case "NVIDIA":
-      // NVIDIA green eye-spiral logo
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2a10 10 0 0 0-4.3 19.1c.4.2.8-.2.8-.6v-2.2c0-.5-.3-.9-.7-1.1a7 7 0 1 1 8.4-1.2l-2-2a4 4 0 1 0-4.3.4c.5.1.8.6.8 1.1v.5c0 .4-.4.8-.8.8a6 6 0 1 1 7.2-1.7l1.7 1.7A9.95 9.95 0 0 0 12 2z" fill="#76b900" /></svg>`;
-    case "GitHub":
-      // GitHub Octocat matching theme color
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.646.64.699 1.026 1.592 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.164 22 16.418 22 12c0-5.523-4.477-10-10-10z" fill="${color}" /></svg>`;
-    case "Amazon":
-      // Amazon signature curved arrow smile
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M18.8 16c-1.3 1.5-3.3 2.3-5.3 2.3-2.6 0-4.9-1.3-6.1-3.2-.2-.3 0-.6.3-.6l1.2.3c.3.1.5 0 .6-.2.8 1.1 2.3 1.8 4 1.8 1.5 0 2.9-.6 3.8-1.7.2-.2.5-.2.7 0l1.1.9c.2.2.1.6-.3.8zm.2-2.5l.8 2.3c.1.3-.2.5-.5.4l-2.4-.6c-.3-.1-.3-.5 0-.6l1-.3-1-1.3c-.2-.3 0-.7.3-.6l1.8.7z" fill="#ff9900" /></svg>`;
-    case "Tesla":
-      // Tesla emblem: curved top arc and stylized T shape
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M21 3.5c-4.4.7-9 .7-13.4 0-.4 0-.8.3-.8.7v.5c0 .4.3.7.7.7h1.4c.5 0 .9.3.9.8v7.8c0 1.2-.7 2.2-1.7 2.7l-1 .5c-.3.2-.4.6-.2.9l.3.5c.2.3.6.4.9.2l1.5-.7c2-.9 4.3-.9 6.3 0l1.5.7c.3.2.7.1.9-.2l.3-.5c.2-.3.1-.7-.2-.9l-1-.5c-1-.5-1.7-1.5-1.7-2.7V8.9c0-.5.4-.8.9-.8H20.3c.4 0 .7-.3.7-.7v-.5c0-.4-.3-.7-.7-.7z" fill="#e82127"/><path d="M12 2c2.2 0 4.3.3 6.3.8.3.1.5-.1.5-.4v-.3c0-.3-.2-.5-.5-.6C16.3 1.1 14.2.8 12 .8S7.7 1.1 5.7 1.5c-.3.1-.5.3-.5.6v.3c0 .3.2.5.5.4C7.7 2.3 9.8 2 12 2z" fill="#e82127"/></svg>`;
-    case "Netflix":
-      // Netflix signature bold red 3D N monogram
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M5.5 3.5h3.2v17H5.5z" fill="#b9090b"/><path d="M15.3 3.5h3.2v17h-3.2z" fill="#b9090b"/><path d="M5.5 3.5h3.2l6.6 17h-3.2z" fill="#e50914"/></svg>`;
-    case "Figma":
-      // Figma colorful 5-shape logo grid
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M8 3a3.5 3.5 0 0 0-3.5 3.5 3.5 3.5 0 0 0 3.5 3.5h3.5V3H8z" fill="#f24e1e"/><path d="M12 6.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" fill="#ff7262"/><path d="M8 10a3.5 3.5 0 0 0-3.5 3.5 3.5 3.5 0 0 0 3.5 3.5h3.5v-7H8z" fill="#a259ff"/><path d="M12 13.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" fill="#1abcfe"/><path d="M8 17a3.5 3.5 0 0 0-3.5 3.5 3.5 3.5 0 0 0 3.5 3.5c1.9 0 3.5-1.6 3.5-3.5v-3.5H8z" fill="#0acf83"/></svg>`;
-    default:
-      return "";
-  }
-}
+
 
 export function InteractiveDots() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -207,10 +152,18 @@ export function InteractiveDots() {
         const y = sphereRadius * Math.sin(phi) * Math.sin(theta);
         const z = sphereRadius * Math.cos(phi);
 
+        // Map display names to local SVG file slugs
+        const slugMap: Record<string, string> = {
+          "OpenAI": "openai", "Gemini": "gemini", "Anthropic": "anthropic",
+          "Meta": "meta", "Mistral": "mistral", "Microsoft": "microsoft",
+          "xAI": "xai", "Cohere": "cohere", "Google": "google",
+          "Apple": "apple", "NVIDIA": "nvidia", "GitHub": "github",
+          "Amazon": "amazon", "Tesla": "tesla", "Netflix": "netflix", "Figma": "figma"
+        };
         const img = new Image();
-        const currentIsLight = true;
-        const svgString = getLogoSvg(name, currentIsLight);
-        img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgString);
+        const slug = slugMap[name] || name.toLowerCase();
+        img.src = `/logos/${slug}.svg`;
+
 
         return {
           name,
