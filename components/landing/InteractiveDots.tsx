@@ -657,8 +657,7 @@ export function InteractiveDots() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 bg-transparent block"
-      style={{ mixBlendMode: isLight ? "multiply" : "screen" }}
+      className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-transparent block"
     />
   );
 }
