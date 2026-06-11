@@ -118,8 +118,11 @@ export function InteractiveDots() {
     let animationFrameId: number;
     let particles: Particle[] = [];
     let logos: LogoParticle[] = [];
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
     // Dynamic color palette mirroring Trend Stack's sleek design:
     // Tech-blues, neon violet, electric pink, clean grays
@@ -219,8 +222,12 @@ export function InteractiveDots() {
 
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      
+      const currentDpr = window.devicePixelRatio || 1;
+      canvas.width = width * currentDpr;
+      canvas.height = height * currentDpr;
       
       sphereRadius = Math.min(width, height) * 0.26;
       if (sphereRadius < 150) sphereRadius = 150;
@@ -285,13 +292,19 @@ export function InteractiveDots() {
         scrollOpacity = 0.0;
       }
 
-      ctx.clearRect(0, 0, width, height);
+      // Reset transform and clear using physical size, then apply DPR scale transform
+      const currentDpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, width * currentDpr, height * currentDpr);
 
       // Early return to preserve CPU/GPU cycles when fully scrolled past the hero
       if (scrollOpacity <= 0) {
         animationFrameId = requestAnimationFrame(animate);
         return;
       }
+
+      // Apply device pixel ratio scale transform
+      ctx.setTransform(currentDpr, 0, 0, currentDpr, 0, 0);
 
       // Center sphere in the middle of the viewport
       const centerX = width * 0.5;
