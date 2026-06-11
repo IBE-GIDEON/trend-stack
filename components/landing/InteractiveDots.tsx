@@ -134,10 +134,31 @@ export function InteractiveDots() {
       "rgba(71, 85, 105, ",   // Slate
     ];
 
-    // Sphere dimensions
-    let sphereRadius = Math.min(width, height) * 0.26;
-    if (sphereRadius < 150) sphereRadius = 150;
-    if (sphereRadius > 280) sphereRadius = 280;
+    // Helper for responsive layout variables (preventing clutter on mobile)
+    const getResponsiveConfig = (w: number, h: number) => {
+      const isMobile = w < 768;
+      
+      let radius = Math.min(w, h) * 0.26;
+      if (isMobile) {
+        if (radius < 85) radius = 85;
+        if (radius > 120) radius = 120;
+      } else {
+        if (radius < 150) radius = 150;
+        if (radius > 280) radius = 280;
+      }
+      
+      return {
+        isMobile,
+        sphereRadius: radius,
+        logoSize: isMobile ? 22 : 38,
+        connectionMaxDist: isMobile ? 45 : 65,
+        magneticRadius: isMobile ? 70 : 140,
+        hoverTriggerDist: isMobile ? 45 : 80
+      };
+    };
+
+    let currentConfig = getResponsiveConfig(width, height);
+    let sphereRadius = currentConfig.sphereRadius;
 
     const createSphere = () => {
       particles = [];
@@ -229,9 +250,8 @@ export function InteractiveDots() {
       canvas.width = width * currentDpr;
       canvas.height = height * currentDpr;
       
-      sphereRadius = Math.min(width, height) * 0.26;
-      if (sphereRadius < 150) sphereRadius = 150;
-      if (sphereRadius > 280) sphereRadius = 280;
+      currentConfig = getResponsiveConfig(width, height);
+      sphereRadius = currentConfig.sphereRadius;
       
       createSphere();
       
@@ -310,6 +330,8 @@ export function InteractiveDots() {
       const centerX = width * 0.5;
       const centerY = height * 0.5;
       const mouse = mouseRef.current;
+      
+      const config = getResponsiveConfig(width, height);
 
       // Check if light/dark theme toggled during animation loop (Landing page is always light/white background)
       const currentIsLight = true;
@@ -362,7 +384,7 @@ export function InteractiveDots() {
           const dx = cx - mouse.x;
           const dy = cy - mouse.y;
           const dist = Math.hypot(dx, dy);
-          const activeRadius = 140;
+          const activeRadius = config.magneticRadius;
 
           if (dist < activeRadius) {
             // Push particle coordinates slightly outward in 3D
@@ -426,7 +448,7 @@ export function InteractiveDots() {
             const dist = Math.hypot(dx, dy);
 
             // Close hover: highlight and scale the specific logo under the cursor
-            if (dist < 80) {
+            if (dist < config.hoverTriggerDist) {
               targetOpacity = 0.90;
               targetScale = 1.35;
             }
@@ -449,7 +471,7 @@ export function InteractiveDots() {
           const dx = lcx - mouse.x;
           const dy = lcy - mouse.y;
           const dist = Math.hypot(dx, dy);
-          const activeRadius = 140;
+          const activeRadius = config.magneticRadius;
 
           if (dist < activeRadius) {
             const pushFactor = ((activeRadius - dist) / activeRadius) * 20;
@@ -486,7 +508,7 @@ export function InteractiveDots() {
           const dy = pi.cy - pj.cy;
           const screenDist = Math.hypot(dx, dy);
 
-          if (screenDist < connectionMaxDist) {
+          if (screenDist < config.connectionMaxDist) {
             // Check 3D distance to ensure actual connection on the sphere shell
             const dist3d = Math.hypot(
               particles[i].x3d - particles[j].x3d,
@@ -494,8 +516,8 @@ export function InteractiveDots() {
               particles[i].z3d - particles[j].z3d
             );
 
-            if (dist3d < connectionMaxDist * 1.5) {
-              const alpha = (1 - screenDist / connectionMaxDist) * 0.18 * scrollOpacity;
+            if (dist3d < config.connectionMaxDist * 1.5) {
+              const alpha = (1 - screenDist / config.connectionMaxDist) * 0.18 * scrollOpacity;
               
               ctx.beginPath();
               ctx.strokeStyle = currentIsLight 
@@ -522,16 +544,16 @@ export function InteractiveDots() {
           const dy = logoProj.cy - pj.cy;
           const screenDist = Math.hypot(dx, dy);
 
-          if (screenDist < connectionMaxDist * 1.25) {
+          if (screenDist < config.connectionMaxDist * 1.25) {
             const dist3d = Math.hypot(
               logos[i].x3d - particles[j].x3d,
               logos[i].y3d - particles[j].y3d,
               logos[i].z3d - particles[j].z3d
             );
 
-            if (dist3d < connectionMaxDist * 1.8) {
+            if (dist3d < config.connectionMaxDist * 1.8) {
               // Lines get brighter when the logo is highlighted/hovered
-              const alpha = (1 - screenDist / (connectionMaxDist * 1.25)) * 0.45 * logoProj.opacity * scrollOpacity;
+              const alpha = (1 - screenDist / (config.connectionMaxDist * 1.25)) * 0.45 * logoProj.opacity * scrollOpacity;
               ctx.beginPath();
               ctx.lineWidth = 0.7;
               ctx.strokeStyle = currentIsLight 
@@ -567,7 +589,7 @@ export function InteractiveDots() {
         if (logo.img && logo.img.complete) {
           const depthScale = (perspective - logo.cz) / perspective;
           const opacity = Math.max(0.01, logo.opacity * depthScale) * scrollOpacity;
-          const size = 38 * logo.scale * depthScale;
+          const size = config.logoSize * logo.scale * depthScale;
 
           ctx.save();
           ctx.globalAlpha = opacity;
