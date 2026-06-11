@@ -78,33 +78,33 @@ export function LandingHero() {
     },
   };
 
-  const heroHeadline = "Automate Your Tech Intelligence & Media Pipeline";
+  const heroHeadline = "Next-Gen Tech News & Intelligence for Builders";
   const headlineWords = heroHeadline.split(" ");
 
   const featureCards = [
     {
-      title: "Automated News Aggregator",
-      description: "Scrapes daily stories from 20+ verified RSS sources including OpenAI, Anthropic, TechCrunch, and Hacker News.",
-      badge: "Aggregator",
+      title: "Artificial Intelligence Beat",
+      description: "Deep-dives into frontier models, academic research papers, developer benchmarks, and GPU compute telemetry.",
+      badge: "AI & ML",
       accent: "#3b82f6", // blue
       graphic: (
         <div className="flex items-center space-x-1.5 bg-blue-50/50 border border-blue-100/30 px-3 py-1.5 rounded-lg">
           <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-          <span className="text-[11px] font-mono text-blue-600 font-semibold tracking-wider uppercase">20+ RSS Feeds Active</span>
+          <span className="text-[11px] font-mono text-blue-600 font-semibold tracking-wider uppercase">Telemetry Stream Active</span>
         </div>
       ),
     },
     {
-      title: "AI-Powered Story Ranking",
-      description: "Uses OpenRouter and Mistral/Llama models to automatically rank the top 8 high-impact stories every morning.",
-      badge: "AI Ranker",
+      title: "Startups & Venture Capital",
+      description: "Early indicators of product-market fit, funding rounds, valuations, and emerging tech sectors.",
+      badge: "Venture",
       accent: "#10b981", // green
       graphic: <Sparkline color="#10b981" />,
     },
     {
-      title: "Automated Asset Grabber",
-      description: "Playwright automatically takes article screenshots and extracts brand logos and featured assets into organized daily folders.",
-      badge: "Asset Grabber",
+      title: "Markets & Silicon Supply",
+      description: "Data-driven tech equities, semiconductor supply chains, hardware updates, and market correlations.",
+      badge: "Markets",
       accent: "#f59e0b", // yellow
       graphic: (
         <div className="flex space-x-1 items-end h-8">
@@ -116,13 +116,13 @@ export function LandingHero() {
       ),
     },
     {
-      title: "Solo Content Pipeline",
-      description: "Generates custom script overlays and distribution copy optimized for YouTube Shorts, TikTok, Reels, X, and LinkedIn.",
-      badge: "Media Engine",
+      title: "Deep Research & Open Source",
+      description: "Distilled technical briefs on developer ecosystem trends, repository releases, and developer infrastructure.",
+      badge: "Tech Stack",
       accent: "#8b5cf6", // purple
       graphic: (
         <div className="font-mono text-[11px] text-purple-600/80 bg-purple-50 px-2.5 py-1 rounded border border-purple-100/50">
-          clip_generator.py
+          git log --oneline -n 1
         </div>
       ),
     },
@@ -204,7 +204,7 @@ export function LandingHero() {
             variants={itemVariants}
             className="font-sans text-[17px] md:text-[19px] text-zinc-500 max-w-xl mb-10 leading-relaxed font-light"
           >
-            Scrape 20+ tech feeds, rank stories with AI, and auto-grab screenshots, logos, and featured images for your social media content pipeline.
+            Deep coverage of AI breakthroughs, startup funding rounds, market trends, and developer ecosystems. Curated daily, built for founders and builders.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -245,10 +245,10 @@ export function LandingHero() {
             Under the Hood
           </span>
           <h2 className="text-[32px] md:text-[44px] font-sans font-medium text-zinc-900 tracking-tight mt-4 mb-5">
-            The Solo Content Machine
+            Signal Over Noise
           </h2>
           <p className="text-[16px] text-zinc-500 leading-relaxed font-light">
-            Trend Stack pairs RSS scraping and AI ranking with automated Playwright asset gathering. Produce high-impact Tech and AI content in under 15 minutes without burnout.
+            We monitor the global tech sector to deliver highly accurate, noise-free intelligence. Get the critical insights and market telemetry you need to stay ahead, curated by builders, for builders.
           </p>
         </motion.div>
 
@@ -333,7 +333,7 @@ export function LandingHero() {
               Enter the Trend Stack Workspace
             </h2>
             <p className="text-[15px] text-zinc-400 leading-relaxed font-light">
-              Unlock the RSS news aggregator, AI ranking engine, and Playwright screenshot generator directly from your desktop dashboard workspace.
+              Access our live tech news terminal, tracking venture deals, developer trend indices, and market shifts in real-time.
             </p>
           </div>
 

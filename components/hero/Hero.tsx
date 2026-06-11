@@ -9,8 +9,8 @@ const getPageInfo = (item: NotionItem) => {
       return {
         title: "Trend Stack Intelligence Hub",
         icon: "🏠",
-        description: "Welcome to your solo content machine. Monitor the automated news aggregator feeds, view daily AI-ranked tech stories, and access downloaded screenshots and featured media assets.",
-        tags: ["News Aggregator", "Content Pipeline"],
+        description: "Welcome to the premium technology intelligence workspace. Below is the active database containing real-time market telemetry, AI benchmarks, venture funding rounds, and technical briefs.",
+        tags: ["News Hub", "Active Desk"],
       };
     case "news":
       return {
