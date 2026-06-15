@@ -280,10 +280,7 @@ export function LandingHero() {
           <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-purple-500/10 blur-[100px] pointer-events-none" />
 
           <div className="max-w-xl mb-8 md:mb-0 z-10">
-            <span className="text-[10px] font-mono text-blue-400 font-bold uppercase tracking-widest bg-blue-950/50 border border-blue-900/50 px-3 py-1 rounded-full">
-              Get Started
-            </span>
-            <h2 className="text-[28px] md:text-[38px] font-sans font-medium tracking-tight mt-4 mb-4">
+            <h2 className="text-[28px] md:text-[38px] font-sans font-medium tracking-tight mb-4">
               Enter the Trend Stack Workspace
             </h2>
             <p className="text-[15px] text-zinc-400 leading-relaxed font-light">
