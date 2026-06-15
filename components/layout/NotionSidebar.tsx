@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { SearchIcon, UserIcon, BookmarkIcon } from "@/components/ui/icons";
 import Link from "next/link";
+import Image from "next/image";
 
 interface SidebarSectionItem {
   id: NotionItem;
@@ -67,9 +68,13 @@ export function NotionSidebar({ onSearchOpen }: { onSearchOpen: () => void }) {
         {/* Workspace Header */}
         <div className="flex h-14 items-center justify-between px-3 border-b border-fog/50">
           <Link href="/" className="flex items-center gap-2 overflow-hidden hover:opacity-85 transition-opacity">
-            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-sm bg-accent font-mono text-[11px] font-bold text-accent-ink">
-              TS
-            </span>
+            <Image
+              src="/logo.png"
+              width={22}
+              height={22}
+              alt="Trend Stack Logo"
+              className="shrink-0 object-contain rounded-sm"
+            />
             <span className="truncate text-[13px] font-semibold text-soft">
               Trend Stack News
             </span>
