@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useNotion, type NotionItem } from "@/lib/notion-context";
-import { ARTICLES } from "@/data/articles";
 import { getCategory } from "@/data/categories";
 import { CoverArt } from "./CoverArt";
 import { relativeTime, compactNumber } from "@/lib/utils";
@@ -60,24 +59,52 @@ export function NotionDatabase() {
   const [sortBy, setSortBy] = useState<"date" | "views" | "readingTime" | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Expandable toggle rows state for Table View
   const [expandedArticles, setExpandedArticles] = useState<Record<string, boolean>>({});
 
+  // Fetch articles on mount
+  useEffect(() => {
+    let active = true;
+    const fetchArticles = async () => {
+      try {
+        const res = await fetch("/api/articles");
+        if (res.ok) {
+          const data = await res.json();
+          if (active) {
+            setArticles(data);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching articles:", err);
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+    fetchArticles();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   // 1. Filter articles based on sidebar active selection
   const filteredBySelection = useMemo(() => {
     if (activeItem === "home" || activeItem === "news") {
-      return ARTICLES;
+      return articles;
     }
     if (activeItem === "trending") {
-      return ARTICLES.filter((a) => a.trending);
+      return articles.filter((a) => a.trending);
     }
     if (activeItem === "live" || activeItem === "newsletter") {
-      return ARTICLES; // Fallback, normally they view stats/newsletter section
+      return articles; // Fallback, normally they view stats/newsletter section
     }
     // Otherwise filter by category beat
-    return ARTICLES.filter((a) => a.category === activeItem);
-  }, [activeItem]);
+    return articles.filter((a) => a.category === activeItem);
+  }, [activeItem, articles]);
 
   // 2. Filter articles based on inline search query
   const searchedArticles = useMemo(() => {
@@ -249,7 +276,22 @@ export function NotionDatabase() {
 
       {/* ── Subviews rendering ── */}
       <div className="w-full">
-        {sortedArticles.length === 0 ? (
+        {loading ? (
+          <div className="space-y-6">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex gap-4 py-5 border-b border-fog/20 last:border-b-0 animate-pulse">
+                {/* Image Placeholder */}
+                <div className="h-20 w-32 sm:h-24 sm:w-40 shrink-0 rounded-md bg-steel/30 border border-fog/40" />
+                {/* Text Placeholder */}
+                <div className="flex-1 space-y-3 py-1">
+                  <div className="h-3 bg-steel/30 rounded w-1/4" />
+                  <div className="h-5 bg-steel/45 rounded w-3/4" />
+                  <div className="h-3 bg-steel/30 rounded w-1/2" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : sortedArticles.length === 0 ? (
           <div className="rounded border border-dashed border-fog p-12 text-center text-muted text-[13px]">
             <p className="font-semibold text-soft">No database entries match your filters</p>
             <p className="mt-1 text-xs text-ash">Try adjusting your search query or clear the filter.</p>
@@ -329,7 +371,7 @@ export function NotionDatabase() {
 
                     {/* Bullet List */}
                     <ul className="space-y-3.5 pt-1">
-                      {ARTICLES.slice(0, 6).map((pa) => (
+                      {articles.slice(0, 6).map((pa) => (
                         <li key={pa.id} className="flex items-start gap-2.5 text-[12px] leading-snug">
                           <span className="h-1.5 w-1.5 shrink-0 bg-white rounded-xs mt-1.5 select-none" />
                           <button
@@ -603,7 +645,15 @@ export function NotionDatabase() {
               <div className="flex-1 overflow-y-auto scrollbar-thin pb-16">
                 {/* ── Cover Image ── */}
                 <div className="relative h-36 w-full overflow-hidden shrink-0 select-none">
-                  <CoverArt seed={activeArticle.coverSeed} />
+                  {activeArticle.image ? (
+                    <img
+                      src={activeArticle.image}
+                      alt="Cover"
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <CoverArt seed={activeArticle.coverSeed} />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal to-transparent opacity-60" />
                 </div>
 
@@ -690,6 +740,16 @@ export function NotionDatabase() {
 
                   {/* ── Document Body Content ── */}
                   <div className="mt-8 font-sans text-[14px] sm:text-[15px] leading-relaxed text-soft space-y-6">
+                    {/* Featured Image */}
+                    {activeArticle.image && (
+                      <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden border border-fog/60 bg-graphite mb-6 shadow-md select-none group">
+                        <img
+                          src={activeArticle.image}
+                          alt={activeArticle.title}
+                          className="object-cover w-full h-full hover:scale-[1.01] transition-transform duration-500"
+                        />
+                      </div>
+                    )}
                     {/* Lead paragraph */}
                     <p className="font-semibold text-soft/90 border-l-2 border-accent/40 pl-3.5 py-1 text-base bg-charcoal/20">
                       {activeArticle.excerpt}

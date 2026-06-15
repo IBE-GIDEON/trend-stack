@@ -44,6 +44,8 @@ export interface Article {
   trending?: boolean;
   /** Shows the "AI Insights" badge. */
   aiInsights?: boolean;
+  /** Optional picture URL for the article peek view. */
+  image?: string;
 }
 
 export interface TickerItem {
