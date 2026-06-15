@@ -175,64 +175,18 @@ export function Hero() {
           {info.title}
         </h1>
 
-        {/* ── Notion Page Properties Grid ── */}
-        <div className="mt-6 border-y border-fog/60 py-4 font-sans text-[13px]">
-          <div className="grid grid-cols-1 gap-y-2.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6">
-            {/* Property: Created By */}
-            <div className="flex items-center gap-2">
-              <span className="w-24 shrink-0 text-muted">✍️ Created By</span>
-              <span className="rounded bg-steel px-2 py-0.5 text-xs text-soft font-medium">
-                Trend Stack Newsroom
-              </span>
-            </div>
-
-            {/* Property: Status */}
-            <div className="flex items-center gap-2">
-              <span className="w-24 shrink-0 text-muted">🏷️ Status</span>
-              <span className="inline-flex items-center gap-1.5 rounded bg-up/10 px-2 py-0.5 text-xs text-up font-semibold">
-                <span className="h-1.5 w-1.5 rounded-full bg-up animate-pulse-dot" />
-                Live Updates
-              </span>
-            </div>
-
-            {/* Property: Access */}
-            <div className="flex items-center gap-2">
-              <span className="w-24 shrink-0 text-muted">🔐 Access</span>
-              <span className="rounded bg-steel px-2 py-0.5 text-xs text-soft font-medium">
-                Public News Directory
-              </span>
-            </div>
-
-            {/* Property: Beats */}
-            <div className="flex items-center gap-2">
-              <span className="w-24 shrink-0 text-muted">📂 Beats</span>
-              <div className="flex flex-wrap gap-1">
-                {info.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded bg-accent/10 px-2 py-0.5 text-xs text-accent font-medium border border-accent/20"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+        {/* ── Page Properties / Metadata ── */}
+        <div className="mt-4 border-t border-fog/40 pt-3 text-[13px] font-sans">
+          <div className="flex items-center gap-2">
+            <span className="text-muted flex items-center gap-1 w-[90px] shrink-0">
+              <span>✍️</span> Created by
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded bg-steel/40 px-2 py-0.5 font-medium text-soft hover:bg-steel/60 transition-all cursor-pointer border border-fog/30 text-[12px]">
+              <span className="h-4 w-4 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-[9px] font-mono text-accent font-bold">TS</span>
+              Trend Stack Newsroom
+            </span>
           </div>
         </div>
-
-        {/* ── Callout Block ── */}
-        <div className="mt-6">
-          <div className="notion-callout bg-charcoal/50">
-            <span className="text-xl select-none">💡</span>
-            <div className="space-y-1">
-              <p className="font-semibold text-soft">Trend Stack News Hub Notice</p>
-              <p className="text-muted leading-relaxed text-[13px]">{info.description}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Page Divider ── */}
-        <hr className="mt-8 border-fog/60" />
       </div>
     </div>
   );
