@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { TrendStackLogo } from "./LandingHeader";
+import { cn } from "@/lib/utils";
 
 // Chevron Right SVG
 function ChevronRightIcon() {
@@ -30,41 +31,30 @@ export function LandingHero() {
     },
   };
 
-  const itemVariants = {
-    hidden: { y: 18, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
-    },
-  };
-
-  // Text writing animation variants
-  const sentenceVariants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.025, // Stagger speed per character
-      },
-    },
-  };
-
-  const letterVariants = {
-    hidden: { opacity: 0, y: 8 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 30,
-        stiffness: 250,
-      },
-    },
-  };
-
   const heroHeadline = "Next-Gen Tech News & Intelligence for Builders";
-  const headlineWords = heroHeadline.split(" ");
+  const [typedText, setTypedText] = useState("");
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+
+  useEffect(() => {
+    let index = 0;
+    const typingSpeed = 50; // medium speed rate (50ms per character)
+    
+    const delayTimeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        if (index < heroHeadline.length) {
+          setTypedText((prev) => prev + heroHeadline.charAt(index));
+          index++;
+        } else {
+          clearInterval(interval);
+          setIsTypingComplete(true);
+        }
+      }, typingSpeed);
+      
+      return () => clearInterval(interval);
+    }, 400); // 400ms initial delay before typing starts
+
+    return () => clearTimeout(delayTimeout);
+  }, []);
 
   const featureCards = [
     {
@@ -133,7 +123,9 @@ export function LandingHero() {
         >
           {/* Top Badge logo */}
           <motion.div
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 10 }}
+            animate={isTypingComplete ? { opacity: 1, y: 0 } : { opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="flex items-center space-x-2.5 mb-8"
           >
             <TrendStackLogo size={24} />
@@ -142,31 +134,25 @@ export function LandingHero() {
             </span>
           </motion.div>
 
-          {/* Heading - Writing typewriter effect */}
-          <motion.h1
-            variants={sentenceVariants}
-            className="font-sans font-medium text-[38px] md:text-[62px] lg:text-[72px] text-zinc-900 tracking-tight leading-[1.08] max-w-3xl mb-8 flex flex-wrap justify-center"
-          >
-            {headlineWords.map((word, wordIndex) => (
-              <span key={wordIndex} className="inline-block whitespace-nowrap">
-                {Array.from(word).map((char, charIndex) => (
-                  <motion.span
-                    key={charIndex}
-                    variants={letterVariants}
-                    className="inline-block"
-                  >
-                    {char}
-                  </motion.span>
-                ))}
-                {/* Space between words */}
-                <span className="inline-block">&nbsp;</span>
-              </span>
-            ))}
-          </motion.h1>
+          {/* Heading - Real typewriter effect with blinking cursor */}
+          <h1 className="font-sans font-medium text-[38px] md:text-[62px] lg:text-[72px] text-zinc-900 tracking-tight leading-[1.08] max-w-3xl mb-8 flex flex-wrap justify-center min-h-[76px] md:min-h-[124px] lg:min-h-[144px]">
+            <span>{typedText}</span>
+            <span 
+              className={cn(
+                "inline-block w-[3px] h-[34px] md:h-[54px] lg:h-[64px] bg-zinc-900 ml-1.5 align-middle animate-pulse",
+                isTypingComplete && "opacity-0 transition-opacity duration-500 pointer-events-none"
+              )}
+              style={{
+                animationDuration: "0.8s"
+              }}
+            />
+          </h1>
 
           {/* Subtext explaining the platform + Trend Stack */}
           <motion.p
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 10 }}
+            animate={isTypingComplete ? { opacity: 1, y: 0 } : { opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
             className="font-sans text-[17px] md:text-[19px] text-zinc-500 max-w-xl mb-10 leading-relaxed font-light"
           >
             Deep coverage of AI breakthroughs, startup funding rounds, market trends, and developer ecosystems. Curated daily, built for founders and builders.
@@ -174,7 +160,9 @@ export function LandingHero() {
 
           {/* CTA Buttons */}
           <motion.div
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 10 }}
+            animate={isTypingComplete ? { opacity: 1, y: 0 } : { opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
             className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto"
           >
             {/* Launch Workspace */}
