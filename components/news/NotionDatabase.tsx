@@ -9,7 +9,31 @@ import { relativeTime, compactNumber } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import type { Article } from "@/data/types";
 
-type ViewType = "gallery" | "table" | "list" | "board";
+type ViewType = "editorial" | "gallery" | "table" | "list" | "board";
+
+const getCategoryColorClass = (category: string) => {
+  switch (category) {
+    case "ai":
+    case "opinion":
+      return "text-[#9a6dfe] dark:text-[#c09fff]";
+    case "startups":
+    case "science":
+      return "text-[#24b395] dark:text-[#5eead4]";
+    case "big-tech":
+    case "cloud":
+      return "text-[#389cff] dark:text-[#8ec5fc]";
+    case "markets":
+    case "finance":
+      return "text-[#ffd55a] dark:text-[#ffe480]";
+    case "cybersecurity":
+      return "text-[#ff7878] dark:text-[#ff9e9e]";
+    case "programming":
+    case "products":
+      return "text-[#ffa340] dark:text-[#ffcc99]";
+    default:
+      return "text-emerald-500 dark:text-emerald-400";
+  }
+};
 
 const CATEGORY_EMOJIS: Record<string, string> = {
   ai: "🤖",
@@ -30,7 +54,7 @@ const CATEGORY_EMOJIS: Record<string, string> = {
 
 export function NotionDatabase() {
   const { activeItem, setActiveItem } = useNotion();
-  const [view, setView] = useState<ViewType>("gallery");
+  const [view, setView] = useState<ViewType>("editorial");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "views" | "readingTime" | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -142,6 +166,7 @@ export function NotionDatabase() {
         {/* Notion-style database view tabs */}
         <div className="flex flex-wrap gap-1 text-[13px] text-muted">
           {[
+            { id: "editorial", label: "Editorial View", icon: "📰" },
             { id: "gallery", label: "Gallery View", icon: "📁" },
             { id: "table", label: "Table View", icon: "📋" },
             { id: "list", label: "List View", icon: "📰" },
@@ -229,6 +254,87 @@ export function NotionDatabase() {
           </div>
         ) : (
           <>
+            {/* ── EDITORIAL VIEW ── */}
+            {view === "editorial" && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start select-text">
+                {/* Left Column: List of News Articles */}
+                <div className="lg:col-span-8 divide-y divide-fog/50">
+                  {sortedArticles.map((a) => (
+                    <article
+                      key={a.id}
+                      className="flex gap-4 py-5 first:pt-0 last:pb-0"
+                    >
+                      {/* Left Side: Thumbnail (16:9 Aspect Ratio) */}
+                      <div className="relative h-20 w-32 sm:h-24 sm:w-40 shrink-0 overflow-hidden rounded-md border border-fog/60 bg-graphite select-none">
+                        <CoverArt seed={a.coverSeed} />
+                      </div>
+
+                      {/* Right Side: Article Details */}
+                      <div className="flex-1 flex flex-col justify-center min-w-0">
+                        {/* Category */}
+                        <span className={cn("text-[10px] font-sans font-bold tracking-wider uppercase mb-1", getCategoryColorClass(a.category))}>
+                          {getCategory(a.category).label}
+                        </span>
+
+                        {/* Title */}
+                        <h3 className="font-sans font-bold text-soft text-base md:text-lg leading-snug hover:text-accent transition-colors">
+                          <a href={`#${a.slug}`}>
+                            {a.title}
+                          </a>
+                        </h3>
+
+                        {/* Author and Published Date */}
+                        <p className="mt-1.5 text-[12px] text-muted font-sans flex items-center gap-1.5">
+                          <span className="font-medium">{a.author.name}</span>
+                          <span className="text-ash/60">·</span>
+                          <span>{relativeTime(a.publishedAt)}</span>
+                        </p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+
+                {/* Right Column: Widgets */}
+                <div className="lg:col-span-4 space-y-6">
+                  {/* Card 1: Register Promo */}
+                  <div className="rounded-lg border border-emerald-500/20 bg-charcoal/20 p-5 flex flex-col items-center text-center space-y-4 shadow-xs select-none">
+                    <p className="text-[13px] text-muted leading-relaxed font-sans">
+                      Get an inside look at what it takes to scale and succeed from leaders at Mach Industries, Founders Fund, and Shinkei Systems. Through candid fireside chats and high-impact networking, you&apos;ll walk away with valuable insights and new connections.
+                    </p>
+                    <button className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-sans font-bold text-[13px] rounded transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]">
+                      <span>REGISTER NOW</span>
+                      <span className="text-sm font-bold">›</span>
+                    </button>
+                  </div>
+
+                  {/* Card 2: Most Popular */}
+                  <div className="rounded-lg bg-[#5c3ce6] p-5 text-white space-y-4 shadow-md select-none">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-sans font-extrabold text-[17px] tracking-tight text-white uppercase">
+                        Most Popular
+                      </h4>
+                      <div className="h-7 w-7 rounded bg-yellow-300 flex items-center justify-center text-[15px] shadow-xs text-black font-bold">
+                        📈
+                      </div>
+                    </div>
+
+                    {/* Bullet List */}
+                    <ul className="space-y-3.5 pt-1">
+                      {ARTICLES.slice(0, 6).map((pa) => (
+                        <li key={pa.id} className="flex items-start gap-2.5 text-[12px] leading-snug">
+                          <span className="h-1.5 w-1.5 shrink-0 bg-white rounded-xs mt-1.5 select-none" />
+                          <a href={`#${pa.slug}`} className="hover:underline font-medium text-white/95 transition-opacity hover:opacity-90">
+                            {pa.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* ── GALLERY VIEW ── */}
             {view === "gallery" && (
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">

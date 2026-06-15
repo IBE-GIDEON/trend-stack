@@ -1,6 +1,7 @@
 "use client";
 
 import { Hero } from "@/components/hero/Hero";
+import { NotionDatabase } from "@/components/news/NotionDatabase";
 import { Footer } from "@/components/layout/Footer";
 
 export default function DashboardPage() {
@@ -10,7 +11,7 @@ export default function DashboardPage() {
       <Hero />
 
       <div className="flex-1 px-6 lg:px-10 py-6 max-w-editorial mx-auto w-full">
-        {/* We will build active dashboard beats/sections here */}
+        <NotionDatabase />
       </div>
 
       <Footer />
