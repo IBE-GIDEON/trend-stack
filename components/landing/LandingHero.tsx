@@ -241,9 +241,6 @@ export function LandingHero() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center max-w-2xl mb-16"
         >
-          <span className="text-[11px] font-mono text-zinc-400 font-bold uppercase tracking-widest bg-zinc-50 border border-zinc-100 px-3 py-1 rounded-full">
-            Under the Hood
-          </span>
           <h2 className="text-[32px] md:text-[44px] font-sans font-medium text-zinc-900 tracking-tight mt-4 mb-5">
             Signal Over Noise
           </h2>
