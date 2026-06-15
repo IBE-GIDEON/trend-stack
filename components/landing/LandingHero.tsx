@@ -32,18 +32,19 @@ export function LandingHero() {
   };
 
   const heroHeadline = "Next-Gen Tech News & Intelligence for Builders";
-  const [typedText, setTypedText] = useState("");
+  const headlineWords = heroHeadline.split(" ");
+  const [activeLength, setActiveLength] = useState(0);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   useEffect(() => {
-    let index = 0;
+    let currentLength = 0;
     const typingSpeed = 50; // medium speed rate (50ms per character)
     
     const delayTimeout = setTimeout(() => {
       const interval = setInterval(() => {
-        if (index < heroHeadline.length) {
-          setTypedText((prev) => prev + heroHeadline.charAt(index));
-          index++;
+        if (currentLength < heroHeadline.length) {
+          currentLength++;
+          setActiveLength(currentLength);
         } else {
           clearInterval(interval);
           setIsTypingComplete(true);
@@ -134,18 +135,74 @@ export function LandingHero() {
             </span>
           </motion.div>
 
-          {/* Heading - Real typewriter effect with blinking cursor */}
-          <h1 className="font-sans font-medium text-[38px] md:text-[62px] lg:text-[72px] text-zinc-900 tracking-tight leading-[1.08] max-w-3xl mb-8 flex flex-wrap justify-center min-h-[76px] md:min-h-[124px] lg:min-h-[144px]">
-            <span>{typedText}</span>
-            <span 
-              className={cn(
-                "inline-block w-[3px] h-[34px] md:h-[54px] lg:h-[64px] bg-zinc-900 ml-1.5 align-middle animate-pulse",
-                isTypingComplete && "opacity-0 transition-opacity duration-500 pointer-events-none"
-              )}
-              style={{
-                animationDuration: "0.8s"
-              }}
-            />
+          {/* Heading - Real typewriter effect preserving old layout arrangement */}
+          <h1 className="font-sans font-medium text-[38px] md:text-[62px] lg:text-[72px] text-zinc-900 tracking-tight leading-[1.08] max-w-3xl mb-8 flex flex-wrap justify-center select-none">
+            {(() => {
+              let absoluteCharIndex = 0;
+              return headlineWords.map((word, wordIndex) => {
+                const wordChars = Array.from(word);
+                return (
+                  <span key={wordIndex} className="inline-block whitespace-nowrap relative">
+                    {wordChars.map((char, charIndex) => {
+                      const isTyped = absoluteCharIndex < activeLength;
+                      const isLastTyped = absoluteCharIndex === activeLength - 1;
+                      const isFirstChar = absoluteCharIndex === 0;
+                      absoluteCharIndex++;
+                      
+                      return (
+                        <span key={charIndex} className="inline-block relative">
+                          {/* Render cursor at index 0 before the first char */}
+                          {isFirstChar && activeLength === 0 && !isTypingComplete && (
+                            <span 
+                              className="absolute top-1/2 -translate-y-1/2 right-[2px] inline-block w-[3px] h-[34px] md:h-[54px] lg:h-[64px] bg-gradient-to-b from-emerald-400 via-purple-400 to-amber-300 mr-0.5 align-middle animate-pulse pointer-events-none z-10"
+                              style={{
+                                animationDuration: "0.8s"
+                              }}
+                            />
+                          )}
+                          
+                          <span className={cn("transition-opacity duration-100", isTyped ? "opacity-100" : "opacity-0")}>
+                            {char}
+                          </span>
+                          
+                          {/* Laser gradient cursor positioned right after the last typed character */}
+                          {isLastTyped && !isTypingComplete && (
+                            <span 
+                              className="absolute top-1/2 -translate-y-1/2 left-[2px] inline-block w-[3px] h-[34px] md:h-[54px] lg:h-[64px] bg-gradient-to-b from-emerald-400 via-purple-400 to-amber-300 ml-0.5 align-middle animate-pulse pointer-events-none z-10"
+                              style={{
+                                animationDuration: "0.8s"
+                              }}
+                            />
+                          )}
+                        </span>
+                      );
+                    })}
+                    {/* Add a space after the word, except for the last word */}
+                    {wordIndex < headlineWords.length - 1 && (() => {
+                      const isSpaceTyped = absoluteCharIndex < activeLength;
+                      const isSpaceLastTyped = absoluteCharIndex === activeLength - 1;
+                      absoluteCharIndex++; // increment for space character
+                      
+                      return (
+                        <span className="inline-block relative">
+                          <span className={cn("transition-opacity duration-100", isSpaceTyped ? "opacity-100" : "opacity-0")}>
+                            &nbsp;
+                          </span>
+                          {isSpaceLastTyped && !isTypingComplete && (
+                            <span 
+                              className="absolute top-1/2 -translate-y-1/2 left-[2px] inline-block w-[3px] h-[34px] md:h-[54px] lg:h-[64px] bg-gradient-to-b from-emerald-400 via-purple-400 to-amber-300 ml-0.5 align-middle animate-pulse pointer-events-none z-10"
+                              style={{
+                                animationDuration: "0.8s"
+                              }}
+                            />
+                          )}
+                        </span>
+                      );
+                    })()}
+                  </span>
+                );
+              });
+            })()}
           </h1>
 
           {/* Subtext explaining the platform + Trend Stack */}
