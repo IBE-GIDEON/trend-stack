@@ -155,7 +155,7 @@ export function Hero() {
   return (
     <div className="w-full select-text">
       {/* ── Cover Image ── */}
-      <div className="relative h-40 w-full overflow-hidden sm:h-52">
+      <div className="relative h-48 w-full overflow-hidden sm:h-64">
         <div className="absolute inset-0 bg-gradient-to-r from-[#efebe4] to-[#e2dacb] dark:from-[#222120] dark:to-[#171716]" />
         {/* Subtle cover grid lines for structure */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
@@ -164,7 +164,7 @@ export function Hero() {
       {/* ── Content Wrapper ── */}
       <div className="mx-auto max-w-editorial px-6 lg:px-10 pb-6">
         {/* ── Overlapping Page Icon ── */}
-        <div className="relative -mt-14 mb-4 inline-block select-none sm:-mt-20">
+        <div className="relative -mt-14 mb-6 inline-block select-none sm:-mt-20">
           <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-charcoal border border-fog shadow-md text-4xl sm:h-28 sm:w-28 sm:text-6xl">
             {info.icon}
           </div>
