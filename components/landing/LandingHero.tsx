@@ -71,21 +71,25 @@ export function LandingHero() {
       title: "Artificial Intelligence Beat",
       description: "Deep-dives into frontier models, academic research papers, developer benchmarks, and GPU compute telemetry.",
       badge: "AI & ML",
+      glowClass: "group-hover:text-blue-500 group-hover:[text-shadow:0_0_10px_rgba(59,130,246,0.5)]",
     },
     {
       title: "Startups & Venture Capital",
       description: "Early indicators of product-market fit, funding rounds, valuations, and emerging tech sectors.",
       badge: "Venture",
+      glowClass: "group-hover:text-emerald-500 group-hover:[text-shadow:0_0_10px_rgba(16,185,129,0.5)]",
     },
     {
       title: "Markets & Silicon Supply",
       description: "Data-driven tech equities, semiconductor supply chains, hardware updates, and market correlations.",
       badge: "Markets",
+      glowClass: "group-hover:text-amber-500 group-hover:[text-shadow:0_0_10px_rgba(245,158,11,0.5)]",
     },
     {
       title: "Deep Research & Open Source",
       description: "Distilled technical briefs on developer ecosystem trends, repository releases, and developer infrastructure.",
       badge: "Tech Stack",
+      glowClass: "group-hover:text-purple-500 group-hover:[text-shadow:0_0_10px_rgba(139,92,246,0.5)]",
     },
   ];
 
@@ -223,7 +227,7 @@ export function LandingHero() {
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-mono tracking-widest font-bold uppercase text-zinc-400">
+                  <span className={`text-[10px] font-mono tracking-widest font-bold uppercase text-zinc-400 transition-all duration-300 ${card.glowClass}`}>
                     {card.badge}
                   </span>
                 </div>
