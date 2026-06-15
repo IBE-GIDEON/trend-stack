@@ -14,21 +14,6 @@ function ChevronRightIcon() {
   );
 }
 
-// Sparkline SVG for the markets/startups card
-function Sparkline({ color = "#3b82f6" }) {
-  return (
-    <svg viewBox="0 0 100 30" className="w-24 h-8 opacity-80">
-      <path
-        d="M0 20 Q 20 5, 40 25 T 80 10 T 100 2"
-        fill="none"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 export function LandingHero() {
   const { scrollY } = useScroll();
   const promptOpacity = useTransform(scrollY, [0, 150], [1, 0]);
@@ -86,45 +71,21 @@ export function LandingHero() {
       title: "Artificial Intelligence Beat",
       description: "Deep-dives into frontier models, academic research papers, developer benchmarks, and GPU compute telemetry.",
       badge: "AI & ML",
-      accent: "#3b82f6", // blue
-      graphic: (
-        <div className="flex items-center space-x-1.5 bg-blue-50/50 border border-blue-100/30 px-3 py-1.5 rounded-lg">
-          <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-          <span className="text-[11px] font-mono text-blue-600 font-semibold tracking-wider uppercase">Telemetry Stream Active</span>
-        </div>
-      ),
     },
     {
       title: "Startups & Venture Capital",
       description: "Early indicators of product-market fit, funding rounds, valuations, and emerging tech sectors.",
       badge: "Venture",
-      accent: "#10b981", // green
-      graphic: <Sparkline color="#10b981" />,
     },
     {
       title: "Markets & Silicon Supply",
       description: "Data-driven tech equities, semiconductor supply chains, hardware updates, and market correlations.",
       badge: "Markets",
-      accent: "#f59e0b", // yellow
-      graphic: (
-        <div className="flex space-x-1 items-end h-8">
-          <div className="w-2 bg-amber-500/20 h-4 rounded-t-sm" />
-          <div className="w-2 bg-amber-500/40 h-6 rounded-t-sm" />
-          <div className="w-2 bg-amber-500/60 h-5 rounded-t-sm" />
-          <div className="w-2 bg-amber-500 h-8 rounded-t-sm" />
-        </div>
-      ),
     },
     {
       title: "Deep Research & Open Source",
       description: "Distilled technical briefs on developer ecosystem trends, repository releases, and developer infrastructure.",
       badge: "Tech Stack",
-      accent: "#8b5cf6", // purple
-      graphic: (
-        <div className="font-mono text-[11px] text-purple-600/80 bg-purple-50 px-2.5 py-1 rounded border border-purple-100/50">
-          git log --oneline -n 1
-        </div>
-      ),
     },
   ];
 
@@ -249,36 +210,28 @@ export function LandingHero() {
           </p>
         </motion.div>
 
-        {/* Feature Grid with glass cards */}
+        {/* Feature Grid with clean editorial cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
           {featureCards.map((card, idx) => (
             <motion.div
               key={card.title}
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
-              whileHover={{ y: -4, scale: 1.01 }}
-              className="group relative bg-white border border-zinc-150 rounded-3xl p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden"
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              className="group bg-white border border-zinc-200/80 rounded-md p-7 hover:border-zinc-400 hover:shadow-[0_8px_30px_rgba(0,0,0,0.015)] transition-all duration-300 flex flex-col justify-between"
             >
-              {/* Interactive colored top indicator on hover */}
-              <div
-                className="absolute top-0 left-0 right-0 h-1 transition-all duration-300 opacity-0 group-hover:opacity-100"
-                style={{ backgroundColor: card.accent }}
-              />
-
               <div>
-                <div className="flex items-center justify-between mb-5">
-                  <span className="text-[10px] font-mono tracking-widest font-semibold uppercase px-2.5 py-1 rounded bg-zinc-50 border border-zinc-100 text-zinc-500">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-mono tracking-widest font-bold uppercase text-zinc-400">
                     {card.badge}
                   </span>
-                  {card.graphic}
                 </div>
 
-                <h3 className="text-[18px] font-sans font-semibold text-zinc-800 mb-2.5 tracking-tight group-hover:text-zinc-900 transition-colors">
+                <h3 className="text-[18px] font-sans font-bold text-zinc-900 mb-2.5 tracking-tight group-hover:text-zinc-950 transition-colors">
                   {card.title}
                 </h3>
-                <p className="text-[14px] text-zinc-500 leading-relaxed font-light">
+                <p className="text-[13.5px] text-zinc-500 leading-relaxed font-normal">
                   {card.description}
                 </p>
               </div>
@@ -286,19 +239,19 @@ export function LandingHero() {
               <div className="mt-8 flex items-center">
                 <Link
                   href="/dashboard"
-                  className="text-[13px] font-medium text-zinc-700 hover:text-zinc-950 transition-colors flex items-center group/link"
+                  className="text-[12.5px] font-mono font-semibold tracking-wider uppercase text-zinc-500 hover:text-zinc-950 transition-colors flex items-center group/link"
                 >
-                  Open in Workspace
+                  Read latest entries
                   <svg
-                    width="14"
-                    height="14"
+                    width="12"
+                    height="12"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2.5"
+                    strokeWidth="3"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="ml-1 transition-transform duration-200 group-hover/link:translate-x-1"
+                    className="ml-1.5 transition-transform duration-200 group-hover/link:translate-x-1"
                   >
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
