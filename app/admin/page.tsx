@@ -45,6 +45,7 @@ export default function AdminDashboardPage() {
   const [aiInsights, setAiInsights] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const router = useRouter();
 
@@ -108,6 +109,34 @@ export default function AdminDashboardPage() {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
       setSlug(computedSlug);
+    }
+  };
+
+  const handleLocalUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setImage(data.url);
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to upload image.");
+      }
+    } catch (err) {
+      alert("Network error uploading image.");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -451,15 +480,42 @@ export default function AdminDashboardPage() {
               {/* Optional Picture Image URL */}
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-wider text-ash block">
-                  Optional Picture URL <span className="text-ash/60">(for detailed view page)</span>
+                  Article Picture <span className="text-ash/60">(local file upload or image URL)</span>
                 </label>
-                <input
-                  type="url"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="https://images.unsplash.com/photo-…"
-                  className="w-full h-9 px-3 bg-graphite/40 border border-fog rounded text-soft focus:outline-none focus:border-accent/50"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                    placeholder="Paste URL or select local file..."
+                    className="flex-1 h-9 px-3 bg-graphite/40 border border-fog rounded text-soft focus:outline-none focus:border-accent/50"
+                  />
+                  <label className="h-9 px-3 bg-steel hover:bg-steel/80 border border-fog/60 rounded text-soft font-semibold text-xs cursor-pointer flex items-center justify-center transition-colors shrink-0">
+                    <span>📤 Upload</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLocalUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                {uploading && (
+                  <p className="text-[11px] text-accent animate-pulse font-medium mt-1">Uploading image locally...</p>
+                )}
+                {image && (
+                  <div className="relative mt-2 w-32 aspect-[16/9] rounded overflow-hidden border border-fog/60 group bg-graphite">
+                    <img src={image} alt="Preview" className="object-cover w-full h-full" />
+                    <button
+                      type="button"
+                      onClick={() => setImage("")}
+                      className="absolute top-1 right-1 h-5 w-5 bg-black/60 rounded-full text-[10px] text-white flex items-center justify-center hover:bg-black/90 transition-colors"
+                      title="Remove Image"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Badges Checklist */}
