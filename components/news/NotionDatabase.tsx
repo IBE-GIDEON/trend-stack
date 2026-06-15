@@ -8,6 +8,7 @@ import { CoverArt } from "./CoverArt";
 import { relativeTime, compactNumber } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import type { Article } from "@/data/types";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ViewType = "editorial" | "gallery" | "table" | "list" | "board";
 
@@ -58,6 +59,7 @@ export function NotionDatabase() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "views" | "readingTime" | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [activeArticle, setActiveArticle] = useState<Article | null>(null);
 
   // Expandable toggle rows state for Table View
   const [expandedArticles, setExpandedArticles] = useState<Record<string, boolean>>({});
@@ -265,7 +267,10 @@ export function NotionDatabase() {
                       className="flex gap-4 py-5 first:pt-0 last:pb-0"
                     >
                       {/* Left Side: Thumbnail (16:9 Aspect Ratio) */}
-                      <div className="relative h-20 w-32 sm:h-24 sm:w-40 shrink-0 overflow-hidden rounded-md border border-fog/60 bg-graphite select-none">
+                      <div
+                        onClick={() => setActiveArticle(a)}
+                        className="cursor-pointer relative h-20 w-32 sm:h-24 sm:w-40 shrink-0 overflow-hidden rounded-md border border-fog/60 bg-graphite select-none hover:opacity-90 transition-opacity"
+                      >
                         <CoverArt seed={a.coverSeed} />
                       </div>
 
@@ -277,10 +282,13 @@ export function NotionDatabase() {
                         </span>
 
                         {/* Title */}
-                        <h3 className="font-sans font-bold text-soft text-base md:text-lg leading-snug hover:text-accent transition-colors">
-                          <a href={`#${a.slug}`}>
+                        <h3 className="font-sans font-bold text-soft text-base md:text-lg leading-snug transition-colors">
+                          <button
+                            onClick={() => setActiveArticle(a)}
+                            className="text-left font-sans font-bold text-soft text-base md:text-lg leading-snug hover:text-accent hover:underline"
+                          >
                             {a.title}
-                          </a>
+                          </button>
                         </h3>
 
                         {/* Author and Published Date */}
@@ -324,9 +332,12 @@ export function NotionDatabase() {
                       {ARTICLES.slice(0, 6).map((pa) => (
                         <li key={pa.id} className="flex items-start gap-2.5 text-[12px] leading-snug">
                           <span className="h-1.5 w-1.5 shrink-0 bg-white rounded-xs mt-1.5 select-none" />
-                          <a href={`#${pa.slug}`} className="hover:underline font-medium text-white/95 transition-opacity hover:opacity-90">
+                          <button
+                            onClick={() => setActiveArticle(pa)}
+                            className="text-left hover:underline font-medium text-white/95 transition-opacity hover:opacity-90"
+                          >
                             {pa.title}
-                          </a>
+                          </button>
                         </li>
                       ))}
                     </ul>
@@ -344,7 +355,10 @@ export function NotionDatabase() {
                     className="group flex flex-col rounded border border-fog bg-charcoal/40 overflow-hidden hover:border-accent/30 transition-colors"
                   >
                     {/* Cover Art Banner */}
-                    <div className="relative h-28 w-full overflow-hidden border-b border-fog/60 bg-graphite">
+                    <div
+                      onClick={() => setActiveArticle(a)}
+                      className="cursor-pointer relative h-28 w-full overflow-hidden border-b border-fog/60 bg-graphite hover:opacity-90 transition-opacity"
+                    >
                       <CoverArt seed={a.coverSeed} />
                     </div>
                     {/* Card Content */}
@@ -352,10 +366,13 @@ export function NotionDatabase() {
                       <div>
                         {/* Title Header with Icon */}
                         <h3 className="font-semibold text-soft text-[14px] leading-snug group-hover:text-accent transition-colors">
-                          <a href={`#${a.slug}`} className="flex items-start gap-1.5">
+                          <button
+                            onClick={() => setActiveArticle(a)}
+                            className="flex items-start gap-1.5 text-left font-semibold text-soft text-[14px] leading-snug hover:text-accent hover:underline w-full"
+                          >
                             <span className="shrink-0">{CATEGORY_EMOJIS[a.category] || "📄"}</span>
                             <span>{a.title}</span>
-                          </a>
+                          </button>
                         </h3>
                         <p className="mt-2 text-[12px] text-muted line-clamp-2 leading-relaxed">
                           {a.excerpt}
@@ -441,12 +458,12 @@ export function NotionDatabase() {
                                       <strong>Correspondent:</strong> {a.author.name} ({a.author.role})
                                     </span>
                                     <span>·</span>
-                                    <a
-                                      href={`#${a.slug}`}
-                                      className="text-accent hover:underline font-semibold"
+                                    <button
+                                      onClick={() => setActiveArticle(a)}
+                                      className="text-accent hover:underline font-semibold text-left"
                                     >
                                       Open Document Page ↗
-                                    </a>
+                                    </button>
                                   </div>
                                 </div>
                               </td>
@@ -470,12 +487,12 @@ export function NotionDatabase() {
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <span className="text-base select-none shrink-0">{CATEGORY_EMOJIS[a.category]}</span>
-                      <a
-                        href={`#${a.slug}`}
-                        className="truncate text-[13px] font-medium text-soft hover:underline hover:text-accent"
+                      <button
+                        onClick={() => setActiveArticle(a)}
+                        className="truncate text-[13px] font-medium text-soft hover:underline hover:text-accent text-left"
                       >
                         {a.title}
-                      </a>
+                      </button>
                     </div>
                     <div className="flex items-center gap-3 shrink-0 ml-7 sm:ml-0 text-[11px] text-ash">
                       <button
@@ -523,12 +540,12 @@ export function NotionDatabase() {
                             key={item.id}
                             className="p-3 bg-charcoal border border-fog rounded hover:border-accent/40 transition-colors"
                           >
-                            <a
-                              href={`#${item.slug}`}
-                              className="text-[12px] font-medium text-soft hover:underline block leading-snug"
+                            <button
+                              onClick={() => setActiveArticle(item)}
+                              className="text-[12px] font-medium text-soft hover:underline block leading-snug text-left w-full"
                             >
                               {item.title}
-                            </a>
+                            </button>
                             <div className="mt-2 flex items-center justify-between text-[10px] text-ash font-mono">
                               <span>👁️ {compactNumber(item.views)}</span>
                               <span>⏱️ {item.readingMinutes}m</span>
@@ -544,6 +561,174 @@ export function NotionDatabase() {
           </>
         )}
       </div>
+
+      {/* ── Side-Peek Panel ── */}
+      <AnimatePresence>
+        {activeArticle && (
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveArticle(null)}
+              className="fixed inset-0 bg-black z-40 animate-fade-in"
+            />
+
+            {/* Slide-over Drawer */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-full sm:w-[560px] md:w-[680px] bg-charcoal border-l border-fog/80 shadow-2xl z-50 flex flex-col h-screen overflow-hidden select-text"
+            >
+              {/* Top Controls Bar */}
+              <div className="flex h-11 items-center justify-between px-4 border-b border-fog/40 bg-charcoal/90 backdrop-blur-xs select-none shrink-0">
+                <div className="flex items-center gap-2 text-muted text-xs font-sans">
+                  <span>📁 Database</span>
+                  <span>/</span>
+                  <span className="truncate max-w-[200px]">{activeArticle.title}</span>
+                </div>
+                <button
+                  onClick={() => setActiveArticle(null)}
+                  className="flex h-7 w-7 items-center justify-center rounded hover:bg-steel text-muted hover:text-soft text-lg font-bold"
+                  title="Close Peek View"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Scrollable Document Area */}
+              <div className="flex-1 overflow-y-auto scrollbar-thin pb-16">
+                {/* ── Cover Image ── */}
+                <div className="relative h-36 w-full overflow-hidden shrink-0 select-none">
+                  <CoverArt seed={activeArticle.coverSeed} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal to-transparent opacity-60" />
+                </div>
+
+                {/* ── Content Container ── */}
+                <div className="px-8 sm:px-12">
+                  {/* Overlapping Page Icon */}
+                  <div className="relative -mt-10 mb-4 inline-block select-none">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-charcoal border border-fog shadow-lg text-4xl">
+                      {CATEGORY_EMOJIS[activeArticle.category]}
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h1 className="text-2xl sm:text-3xl font-sans font-extrabold text-soft leading-tight tracking-tight">
+                    {activeArticle.title}
+                  </h1>
+
+                  {/* ── Notion Page Properties List ── */}
+                  <div className="mt-6 border-y border-fog/40 py-4 space-y-3 text-[13px] font-sans text-muted">
+                    {/* Property: Created By */}
+                    <div className="flex items-center gap-2">
+                      <span className="w-28 shrink-0 text-muted flex items-center gap-1.5">
+                        <span>👤</span> Author
+                      </span>
+                      <span className="font-semibold text-soft">
+                        {activeArticle.author.name}
+                      </span>
+                      <span className="text-ash/60 text-xs">
+                        ({activeArticle.author.role})
+                      </span>
+                    </div>
+
+                    {/* Property: Published Date */}
+                    <div className="flex items-center gap-2">
+                      <span className="w-28 shrink-0 text-muted flex items-center gap-1.5">
+                        <span>📅</span> Published
+                      </span>
+                      <span className="font-medium text-soft">
+                        {new Date(activeArticle.publishedAt).toLocaleDateString(undefined, {
+                          dateStyle: "long",
+                        })}
+                      </span>
+                      <span className="text-ash/60 text-[11px] font-mono">
+                        ({relativeTime(activeArticle.publishedAt)})
+                      </span>
+                    </div>
+
+                    {/* Property: Category Beat */}
+                    <div className="flex items-center gap-2">
+                      <span className="w-28 shrink-0 text-muted flex items-center gap-1.5">
+                        <span>📂</span> Beat
+                      </span>
+                      <button
+                        onClick={() => {
+                          setActiveItem(activeArticle.category as NotionItem);
+                          setActiveArticle(null);
+                        }}
+                        className={cn("notion-tag uppercase tracking-wider text-[10px] font-bold", `notion-tag-${activeArticle.category}`)}
+                      >
+                        {getCategory(activeArticle.category).label}
+                      </button>
+                    </div>
+
+                    {/* Property: Reading Time */}
+                    <div className="flex items-center gap-2">
+                      <span className="w-28 shrink-0 text-muted flex items-center gap-1.5">
+                        <span>⏱️</span> Reading Time
+                      </span>
+                      <span className="font-mono text-soft font-semibold bg-steel/30 px-1.5 py-0.5 rounded border border-fog/40">
+                        {activeArticle.readingMinutes} min
+                      </span>
+                    </div>
+
+                    {/* Property: Telemetry Views */}
+                    <div className="flex items-center gap-2">
+                      <span className="w-28 shrink-0 text-muted flex items-center gap-1.5">
+                        <span>👁️</span> Views
+                      </span>
+                      <span className="font-mono text-soft font-semibold">
+                        {activeArticle.views.toLocaleString()} reads
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* ── Document Body Content ── */}
+                  <div className="mt-8 font-sans text-[14px] sm:text-[15px] leading-relaxed text-soft space-y-6">
+                    {/* Lead paragraph */}
+                    <p className="font-semibold text-soft/90 border-l-2 border-accent/40 pl-3.5 py-1 text-base bg-charcoal/20">
+                      {activeArticle.excerpt}
+                    </p>
+
+                    <h2 className="text-lg font-bold text-soft pt-4 flex items-center gap-2 border-b border-fog/30 pb-1.5">
+                      <span>💡</span> Executive Summary
+                    </h2>
+                    <p>
+                      In the fast-moving landscape of modern technology intelligence, reports out of the {getCategory(activeArticle.category).label} beat show a critical structural shift. Analysts note that capital allocators and technical leads are increasingly prioritizing security, scale, and long-term infrastructure over short-term speculative hype.
+                    </p>
+                    <p>
+                      As key constraints like compute availability, data curation quality, and latency limits reshape the competitive boundaries, the focus has moved from conceptual laboratory demos to real-world deployment viability. This transition marks the beginning of the maturity phase of the current technology cycle.
+                    </p>
+
+                    <blockquote className="notion-quote italic border-l-3 border-[#5c3ce6] bg-steel/20 p-4 rounded-r my-6">
+                      &ldquo;The real moat is no longer just the model or the algorithm, but the clean data pipelines and energy constraints backing them. The spreadsheet has fundamentally changed.&rdquo;
+                      <cite className="block mt-2 text-xs font-semibold not-italic text-muted">— {activeArticle.author.name}, {activeArticle.author.role}</cite>
+                    </blockquote>
+
+                    <h2 className="text-lg font-bold text-soft pt-4 flex items-center gap-2 border-b border-fog/30 pb-1.5">
+                      <span>⚡</span> Key Telemetry & Takeaways
+                    </h2>
+                    <ul className="list-disc pl-5 space-y-2 text-muted">
+                      <li><strong>Infrastructure Scale:</strong> Demand is outstripping localized node capacity, driving hyper-scale node clustering.</li>
+                      <li><strong>Valuation Compression:</strong> Investor checks are shifting focus to clear unit economics and active product-market fit.</li>
+                      <li><strong>Security Auditing:</strong> Standard systems are accelerating post-quantum migrations to counter emerging threat vectors.</li>
+                    </ul>
+
+                    <p className="pt-4 text-xs text-ash/80 border-t border-fog/30">
+                      Document compiled by the Trend Stack editorial desk. For inquiries or updates, contact the newsroom.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
