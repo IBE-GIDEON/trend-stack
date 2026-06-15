@@ -2,7 +2,6 @@
 
 import { useNotion, type NotionItem } from "@/lib/notion-context";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 const getPageInfo = (item: NotionItem) => {
   switch (item) {
@@ -166,15 +165,8 @@ export function Hero() {
       <div className="mx-auto max-w-editorial px-6 lg:px-10 pb-6">
         {/* ── Overlapping Page Icon ── */}
         <div className="relative -mt-14 mb-4 inline-block select-none sm:-mt-20">
-          <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-charcoal border border-fog shadow-md sm:h-28 sm:w-28 overflow-hidden p-2.5 bg-neutral-900/40 backdrop-blur-md">
-            <Image
-              src="/logo.png"
-              width={112}
-              height={112}
-              alt="Trend Stack Logo"
-              className="h-full w-full object-contain"
-              priority
-            />
+          <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-charcoal border border-fog shadow-md text-4xl sm:h-28 sm:w-28 sm:text-6xl">
+            {info.icon}
           </div>
         </div>
 
