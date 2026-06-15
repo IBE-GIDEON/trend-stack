@@ -210,7 +210,7 @@ export function LandingHero() {
           {/* CTA Buttons */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4.5 w-full sm:w-auto"
+            className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto"
           >
             {/* Launch Workspace */}
             <Link
