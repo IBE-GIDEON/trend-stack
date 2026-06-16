@@ -2,11 +2,10 @@
 
 import React, { useMemo, useState, useEffect } from "react";
 import { useNotion, type NotionItem } from "@/lib/notion-context";
-import { getCategory } from "@/data/categories";
 import { CoverArt } from "./CoverArt";
 import { relativeTime, compactNumber } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-import type { Article } from "@/data/types";
+import type { Article, Category } from "@/data/types";
 import { motion, AnimatePresence } from "framer-motion";
 
 type ViewType = "editorial" | "gallery" | "table" | "list" | "board";
@@ -35,23 +34,6 @@ const getCategoryColorClass = (category: string) => {
   }
 };
 
-const CATEGORY_EMOJIS: Record<string, string> = {
-  ai: "🤖",
-  startups: "🚀",
-  "big-tech": "💻",
-  markets: "📊",
-  cybersecurity: "🔐",
-  science: "🔬",
-  programming: "⚙️",
-  data: "💾",
-  cloud: "☁️",
-  "open-source": "🌐",
-  robotics: "🦾",
-  opinion: "✍️",
-  research: "🧠",
-  products: "📦",
-};
-
 export function NotionDatabase() {
   const { activeItem, setActiveItem } = useNotion();
   const [view, setView] = useState<ViewType>("editorial");
@@ -60,36 +42,53 @@ export function NotionDatabase() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Expandable toggle rows state for Table View
   const [expandedArticles, setExpandedArticles] = useState<Record<string, boolean>>({});
 
-  // Fetch articles on mount
+  // Fetch articles and categories on mount
   useEffect(() => {
     let active = true;
-    const fetchArticles = async () => {
+    const loadData = async () => {
       try {
-        const res = await fetch("/api/articles");
-        if (res.ok) {
-          const data = await res.json();
+        const [articlesRes, categoriesRes] = await Promise.all([
+          fetch("/api/articles"),
+          fetch("/api/categories")
+        ]);
+
+        if (articlesRes.ok && categoriesRes.ok) {
+          const articlesData = await articlesRes.json();
+          const categoriesData = await categoriesRes.json();
           if (active) {
-            setArticles(data);
+            setArticles(articlesData);
+            setCategories(categoriesData);
           }
         }
       } catch (err) {
-        console.error("Error fetching articles:", err);
+        console.error("Error loading workspace data:", err);
       } finally {
         if (active) {
           setLoading(false);
         }
       }
     };
-    fetchArticles();
+    loadData();
     return () => {
       active = false;
     };
   }, []);
+
+  // Category helper to fetch label/emoji properties dynamically
+  const getCatInfo = (slug: string): Category => {
+    return categories.find((c) => c.slug === slug) || {
+      slug,
+      label: slug.toUpperCase(),
+      code: slug.substring(0, 3).toUpperCase(),
+      icon: "📄",
+    };
+  };
 
   // 1. Filter articles based on sidebar active selection
   const filteredBySelection = useMemo(() => {
@@ -111,7 +110,7 @@ export function NotionDatabase() {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return filteredBySelection;
     return filteredBySelection.filter((a) => {
-      const categoryLabel = getCategory(a.category).label.toLowerCase();
+      const categoryLabel = getCatInfo(a.category).label.toLowerCase();
       return (
         a.title.toLowerCase().includes(query) ||
         a.excerpt.toLowerCase().includes(query) ||
@@ -119,7 +118,7 @@ export function NotionDatabase() {
         categoryLabel.includes(query)
       );
     });
-  }, [filteredBySelection, searchQuery]);
+  }, [filteredBySelection, searchQuery, categories]);
 
   // 3. Sort articles
   const sortedArticles = useMemo(() => {
@@ -320,7 +319,7 @@ export function NotionDatabase() {
                       <div className="flex-1 flex flex-col justify-center min-w-0">
                         {/* Category */}
                         <span className={cn("text-[10px] font-sans font-bold tracking-wider uppercase mb-1", getCategoryColorClass(a.category))}>
-                          {getCategory(a.category).label}
+                          {getCatInfo(a.category).label}
                         </span>
 
                         {/* Title */}
@@ -412,7 +411,7 @@ export function NotionDatabase() {
                             onClick={() => setActiveArticle(a)}
                             className="flex items-start gap-1.5 text-left font-semibold text-soft text-[14px] leading-snug hover:text-accent hover:underline w-full"
                           >
-                            <span className="shrink-0">{CATEGORY_EMOJIS[a.category] || "📄"}</span>
+                            <span className="shrink-0">{getCatInfo(a.category).icon}</span>
                             <span>{a.title}</span>
                           </button>
                         </h3>
@@ -427,7 +426,7 @@ export function NotionDatabase() {
                           onClick={() => setActiveItem(a.category as NotionItem)}
                           className={cn("notion-tag shrink-0", `notion-tag-${a.category}`)}
                         >
-                          {getCategory(a.category).label}
+                          {getCatInfo(a.category).label}
                         </button>
 
                         <div className="flex items-center gap-1.5">
@@ -469,7 +468,7 @@ export function NotionDatabase() {
                               <span className="mr-2 text-base select-none">
                                 {expanded ? "▼" : "▶"}
                               </span>
-                              <span className="mr-1.5">{CATEGORY_EMOJIS[a.category]}</span>
+                              <span className="mr-1.5">{getCatInfo(a.category).icon}</span>
                               <span className="hover:underline hover:text-accent">{a.title}</span>
                             </td>
                             <td>
@@ -480,7 +479,7 @@ export function NotionDatabase() {
                                 }}
                                 className={cn("notion-tag", `notion-tag-${a.category}`)}
                               >
-                                {getCategory(a.category).label}
+                                {getCatInfo(a.category).label}
                               </button>
                             </td>
                             <td className="text-muted">{a.author.name}</td>
@@ -528,7 +527,7 @@ export function NotionDatabase() {
                     className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 hover:bg-steel/50 transition-colors"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="text-base select-none shrink-0">{CATEGORY_EMOJIS[a.category]}</span>
+                      <span className="text-base select-none shrink-0">{getCatInfo(a.category).icon}</span>
                       <button
                         onClick={() => setActiveArticle(a)}
                         className="truncate text-[13px] font-medium text-soft hover:underline hover:text-accent text-left"
@@ -541,7 +540,7 @@ export function NotionDatabase() {
                         onClick={() => setActiveItem(a.category as NotionItem)}
                         className={cn("notion-tag", `notion-tag-${a.category}`)}
                       >
-                        {getCategory(a.category).label}
+                        {getCatInfo(a.category).label}
                       </button>
                       <span className="font-mono">{a.readingMinutes}m</span>
                       <span>·</span>
@@ -556,7 +555,7 @@ export function NotionDatabase() {
             {view === "board" && (
               <div className="flex gap-4 overflow-x-auto pb-4 select-none scrollbar-thin">
                 {Object.entries(boardData).map(([category, items]) => {
-                  const catInfo = getCategory(category as any);
+                  const catInfo = getCatInfo(category);
                   return (
                     <div
                       key={category}
@@ -565,7 +564,7 @@ export function NotionDatabase() {
                       {/* Column Header */}
                       <div className="flex items-center justify-between px-2 py-1.5 border-b border-fog/60 mb-3">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-sm">{CATEGORY_EMOJIS[category]}</span>
+                          <span className="text-sm">{getCatInfo(category).icon}</span>
                           <span className="text-[12px] font-semibold text-soft truncate">
                             {catInfo.label}
                           </span>
@@ -662,7 +661,7 @@ export function NotionDatabase() {
                   {/* Overlapping Page Icon */}
                   <div className="relative -mt-10 mb-4 inline-block select-none">
                     <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-charcoal border border-fog shadow-lg text-4xl">
-                      {CATEGORY_EMOJIS[activeArticle.category]}
+                      {getCatInfo(activeArticle.category).icon}
                     </div>
                   </div>
 
@@ -713,7 +712,7 @@ export function NotionDatabase() {
                         }}
                         className={cn("notion-tag uppercase tracking-wider text-[10px] font-bold", `notion-tag-${activeArticle.category}`)}
                       >
-                        {getCategory(activeArticle.category).label}
+                        {getCatInfo(activeArticle.category).label}
                       </button>
                     </div>
 
@@ -759,7 +758,7 @@ export function NotionDatabase() {
                       <span>💡</span> Executive Summary
                     </h2>
                     <p>
-                      In the fast-moving landscape of modern technology intelligence, reports out of the {getCategory(activeArticle.category).label} beat show a critical structural shift. Analysts note that capital allocators and technical leads are increasingly prioritizing security, scale, and long-term infrastructure over short-term speculative hype.
+                      In the fast-moving landscape of modern technology intelligence, reports out of the {getCatInfo(activeArticle.category).label} beat show a critical structural shift. Analysts note that capital allocators and technical leads are increasingly prioritizing security, scale, and long-term infrastructure over short-term speculative hype.
                     </p>
                     <p>
                       As key constraints like compute availability, data curation quality, and latency limits reshape the competitive boundaries, the focus has moved from conceptual laboratory demos to real-world deployment viability. This transition marks the beginning of the maturity phase of the current technology cycle.

@@ -18,14 +18,18 @@ export const CATEGORIES: Category[] = [
   { slug: "products", label: "Products", code: "PRD" },
 ];
 
-const BY_SLUG: Record<CategorySlug, Category> = CATEGORIES.reduce(
+const BY_SLUG: Record<string, Category> = CATEGORIES.reduce(
   (acc, c) => {
     acc[c.slug] = c;
     return acc;
   },
-  {} as Record<CategorySlug, Category>,
+  {} as Record<string, Category>,
 );
 
 export function getCategory(slug: CategorySlug): Category {
-  return BY_SLUG[slug];
+  return BY_SLUG[slug] || {
+    slug,
+    label: slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " "),
+    code: slug.substring(0, 3).toUpperCase(),
+  };
 }

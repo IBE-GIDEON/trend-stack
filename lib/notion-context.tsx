@@ -2,26 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-export type NotionItem =
-  | "home"
-  | "news"
-  | "trending"
-  | "live"
-  | "newsletter"
-  | "ai"
-  | "startups"
-  | "big-tech"
-  | "markets"
-  | "cybersecurity"
-  | "science"
-  | "programming"
-  | "data"
-  | "cloud"
-  | "open-source"
-  | "robotics"
-  | "opinion"
-  | "research"
-  | "products";
+export type NotionItem = string;
 
 interface NotionContextType {
   activeItem: NotionItem;

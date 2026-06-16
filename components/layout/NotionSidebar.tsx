@@ -1,11 +1,13 @@
 "use client";
 
+import React, { useState, useEffect, useMemo } from "react";
 import { useNotion, type NotionItem } from "@/lib/notion-context";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
-import { SearchIcon, UserIcon, BookmarkIcon } from "@/components/ui/icons";
+import { SearchIcon } from "@/components/ui/icons";
 import Link from "next/link";
 import Image from "next/image";
+import type { Category } from "@/data/types";
 
 interface SidebarSectionItem {
   id: NotionItem;
@@ -21,25 +23,49 @@ const GENERAL_PAGES: SidebarSectionItem[] = [
   { id: "newsletter", label: "Weekly Briefing", icon: "💌" },
 ];
 
-const BEATS_PAGES: SidebarSectionItem[] = [
-  { id: "ai", label: "Artificial Intelligence", icon: "🤖" },
-  { id: "startups", label: "Startups & Venture", icon: "🚀" },
-  { id: "big-tech", label: "Big Tech", icon: "💻" },
-  { id: "markets", label: "Markets & Finance", icon: "📊" },
-  { id: "cybersecurity", label: "Cybersecurity", icon: "🔐" },
-  { id: "science", label: "Science & Biotech", icon: "🔬" },
-  { id: "programming", label: "Programming", icon: "⚙️" },
-  { id: "data", label: "Data Engineering", icon: "💾" },
-  { id: "cloud", label: "Cloud & Infrastructure", icon: "☁️" },
-  { id: "open-source", label: "Open Source", icon: "🌐" },
-  { id: "robotics", label: "Robotics", icon: "🦾" },
-  { id: "opinion", label: "Opinion", icon: "✍️" },
-  { id: "research", label: "Deep Research", icon: "🧠" },
-  { id: "products", label: "Product Releases", icon: "📦" },
-];
-
 export function NotionSidebar({ onSearchOpen }: { onSearchOpen: () => void }) {
   const { activeItem, setActiveItem, sidebarOpen, setSidebarOpen } = useNotion();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch beats categories on mount
+  useEffect(() => {
+    let active = true;
+    const fetchCats = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        if (res.ok) {
+          const data = await res.json();
+          if (active) {
+            setCategories(data);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching beats:", err);
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+    fetchCats();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Group categories by section
+  const groupedSections = useMemo(() => {
+    const groups: Record<string, Category[]> = {};
+    categories.forEach((cat) => {
+      const sec = cat.section || "Beats & Documents";
+      if (!groups[sec]) {
+        groups[sec] = [];
+      }
+      groups[sec].push(cat);
+    });
+    return groups;
+  }, [categories]);
 
   const handleItemClick = (id: NotionItem) => {
     setActiveItem(id);
@@ -136,27 +162,38 @@ export function NotionSidebar({ onSearchOpen }: { onSearchOpen: () => void }) {
             ))}
           </div>
 
-          {/* Database Beats */}
-          <div className="space-y-[2px]">
-            <p className="px-2.5 pb-1 font-mono text-[9px] uppercase tracking-wider text-ash/80">
-              Beats & Documents
-            </p>
-            {BEATS_PAGES.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleItemClick(item.id)}
-                className={cn(
-                  "flex w-full items-center gap-2.5 rounded-sm px-2.5 py-1.5 text-left text-[13px] transition-colors",
-                  activeItem === item.id
-                    ? "bg-steel text-soft font-medium shadow-[1px_0_0_0_rgb(var(--c-accent))_inset]"
-                    : "text-muted hover:bg-steel/60 hover:text-soft"
-                )}
-              >
-                <span className="text-base select-none">{item.icon}</span>
-                <span className="truncate">{item.label}</span>
-              </button>
-            ))}
-          </div>
+          {/* Dynamically grouped Beats Sections */}
+          {loading ? (
+            <div className="space-y-2 px-2.5 animate-pulse select-none">
+              <div className="h-2 bg-steel/40 rounded w-1/2 mb-3" />
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="h-7 bg-steel/30 rounded w-full" />
+              ))}
+            </div>
+          ) : (
+            Object.entries(groupedSections).map(([sectionName, items]) => (
+              <div key={sectionName} className="space-y-[2px] mt-4 first:mt-0">
+                <p className="px-2.5 pb-1 font-mono text-[9px] uppercase tracking-wider text-ash/80">
+                  {sectionName}
+                </p>
+                {items.map((item) => (
+                  <button
+                    key={item.slug}
+                    onClick={() => handleItemClick(item.slug)}
+                    className={cn(
+                      "flex w-full items-center gap-2.5 rounded-sm px-2.5 py-1.5 text-left text-[13px] transition-colors",
+                      activeItem === item.slug
+                        ? "bg-steel text-soft font-medium shadow-[1px_0_0_0_rgb(var(--c-accent))_inset]"
+                        : "text-muted hover:bg-steel/60 hover:text-soft"
+                    )}
+                  >
+                    <span className="text-base select-none">{item.icon || "📄"}</span>
+                    <span className="truncate">{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            ))
+          )}
         </div>
       </aside>
     </>

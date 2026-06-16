@@ -1,26 +1,17 @@
 /** Shared domain types for the Trend Stack editorial surface. */
 
-export type CategorySlug =
-  | "ai"
-  | "startups"
-  | "big-tech"
-  | "markets"
-  | "cybersecurity"
-  | "science"
-  | "programming"
-  | "data"
-  | "cloud"
-  | "open-source"
-  | "robotics"
-  | "opinion"
-  | "research"
-  | "products";
+export type CategorySlug = string;
 
 export interface Category {
   slug: CategorySlug;
   label: string;
   /** Two/three letter terminal code shown in mono chips. */
   code: string;
+  icon?: string;
+  section?: string;
+  description?: string;
+  tags?: string[];
+  coverImage?: string;
 }
 
 export interface Author {

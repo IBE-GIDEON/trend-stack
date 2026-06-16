@@ -1,0 +1,142 @@
+[
+  {
+    "slug": "ai",
+    "label": "Artificial Intelligence",
+    "code": "AI",
+    "icon": "🤖",
+    "section": "Beats & Documents",
+    "description": "Frontier research, LLM benchmarks, chip silicon scaling, and agentic framework architectures.",
+    "tags": ["AI Beat", "Machine Learning"],
+    "coverImage": ""
+  },
+  {
+    "slug": "startups",
+    "label": "Startups & Venture",
+    "code": "STP",
+    "icon": "🚀",
+    "section": "Beats & Documents",
+    "description": "Funding deal tracker, investor movements, accelerators, and startup valuations.",
+    "tags": ["VC Beat", "Venture Capital"],
+    "coverImage": ""
+  },
+  {
+    "slug": "big-tech",
+    "label": "Big Tech",
+    "code": "BTC",
+    "icon": "💻",
+    "section": "Beats & Documents",
+    "description": "Earnings reports, data center water/energy scaling, silicon fabrication fabs, and regulatory actions.",
+    "tags": ["Big Tech Beat", "Regulatory Desk"],
+    "coverImage": ""
+  },
+  {
+    "slug": "markets",
+    "label": "Markets & Finance",
+    "code": "MKT",
+    "icon": "📊",
+    "section": "Beats & Documents",
+    "description": "Tech equities, semiconductor supply chains, inflation rates, interest rates, and commodity scaling.",
+    "tags": ["Markets Beat", "Equities"],
+    "coverImage": ""
+  },
+  {
+    "slug": "cybersecurity",
+    "label": "Cybersecurity",
+    "code": "SEC",
+    "icon": "🔐",
+    "section": "Beats & Documents",
+    "description": "Post-quantum migration scrambles, state-sponsored vectors, Zero Trust tooling, and infrastructure breaches.",
+    "tags": ["Security Beat", "Infosec"],
+    "coverImage": ""
+  },
+  {
+    "slug": "science",
+    "label": "Science & Biotech",
+    "code": "SCI",
+    "icon": "🔬",
+    "section": "Beats & Documents",
+    "description": "Nuclear fusion grid milestones, quantum computing hardware, room-temperature superconductors, and synthetic bio.",
+    "tags": ["Science Beat", "Hard Tech"],
+    "coverImage": ""
+  },
+  {
+    "slug": "programming",
+    "label": "Programming",
+    "code": "DEV",
+    "icon": "⚙️",
+    "section": "Beats & Documents",
+    "description": "Native compilers, runtime benchmarks, language migrations (TypeScript, Rust, Zig), and developer ergonomics.",
+    "tags": ["Dev Beat", "Programming"],
+    "coverImage": ""
+  },
+  {
+    "slug": "data",
+    "label": "Data Engineering",
+    "code": "DAT",
+    "icon": "💾",
+    "section": "Beats & Documents",
+    "description": "Synthetic data pipelines, vector index algorithms, real-time analytics streaming, and warehousing economics.",
+    "tags": ["Data Beat", "Analytics"],
+    "coverImage": ""
+  },
+  {
+    "slug": "cloud",
+    "label": "Cloud & Infrastructure",
+    "code": "CLD",
+    "icon": "☁️",
+    "section": "Beats & Documents",
+    "description": "Hyper-scale cloud nodes, edge computing frameworks, CDN latency optimizations, and database scaling.",
+    "tags": ["Cloud Beat", "Infrastructure"],
+    "coverImage": ""
+  },
+  {
+    "slug": "open-source",
+    "label": "Open Source",
+    "code": "OSS",
+    "icon": "🌐",
+    "section": "Beats & Documents",
+    "description": "Permissively licensed reasoning models, community tools, licensing battles, and GitHub updates.",
+    "tags": ["OSS Beat", "Community Tools"],
+    "coverImage": ""
+  },
+  {
+    "slug": "robotics",
+    "label": "Robotics",
+    "code": "RBT",
+    "icon": "🦾",
+    "section": "Beats & Documents",
+    "description": "Humanoid policies, pick-and-place foundation models, drone navigation, and factory Floor optimization.",
+    "tags": ["Robotics Beat", "Hardware Autonomy"],
+    "coverImage": ""
+  },
+  {
+    "slug": "opinion",
+    "label": "Opinion",
+    "code": "OPN",
+    "icon": "✍️",
+    "section": "Beats & Documents",
+    "description": "Contrarian opinions, editor briefings, technology ethical concerns, and regulatory critiques.",
+    "tags": ["Editorial", "Perspectives"],
+    "coverImage": ""
+  },
+  {
+    "slug": "research",
+    "label": "Deep Research",
+    "code": "RES",
+    "icon": "🧠",
+    "section": "Beats & Documents",
+    "description": "Academic papers, peer-reviewed journals, lab experiments, and mathematical breakthroughs.",
+    "tags": ["Research Beat", "Academia"],
+    "coverImage": ""
+  },
+  {
+    "slug": "products",
+    "label": "Product Releases",
+    "code": "PRD",
+    "icon": "📦",
+    "section": "Beats & Documents",
+    "description": "New AI gadgets, software updates, developer API releases, and hardware announcements.",
+    "tags": ["Products Beat", "Hardware & Software"],
+    "coverImage": ""
+  }
+]
