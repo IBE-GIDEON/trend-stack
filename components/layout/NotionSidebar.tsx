@@ -158,19 +158,6 @@ export function NotionSidebar({ onSearchOpen }: { onSearchOpen: () => void }) {
             ))}
           </div>
         </div>
-
-        {/* Sidebar Footer User Info */}
-        <div className="border-t border-fog/50 bg-charcoal p-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-7 w-7 items-center justify-center bg-graphite rounded-full border border-fog/50 font-mono text-[11px] font-bold text-soft select-none">
-              U
-            </div>
-            <div className="min-w-0 flex-1 leading-tight">
-              <p className="truncate text-[12px] font-medium text-soft">Guest User</p>
-              <p className="truncate text-[10px] text-ash">Free Reader Access</p>
-            </div>
-          </div>
-        </div>
       </aside>
     </>
   );
