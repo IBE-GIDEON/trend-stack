@@ -25,6 +25,11 @@ export const metadata: Metadata = {
     "Experience liftoff with the next-generation technology intelligence platform. Trend Stack coordinates intelligent data agents to track AI, startups, markets, and deep research.",
   keywords: ["Trend Stack", "technology intelligence", "AI", "startups", "markets", "venture capital", "research"],
   authors: [{ name: "Trend Stack Team" }],
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     type: "website",
     title: "Trend Stack — The Future of Technology Intelligence",
